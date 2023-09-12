@@ -11,22 +11,49 @@ typedef struct student_struct
     string firstName, lastName;
     vector<int> exam;
     char finalGrade;
-
     // Constructor to initialize the exam vector with zeros
     student_struct() : exam(3, 0) {}
 } student;
 
-void initialize_Class(vector<student> &Class);
-
 int main()
 {
-    vector<student> Class(5);
-    initialize_Class(Class);
+    ifstream inSS;
+    ofstream outSS;
+
+    inSS.open("Student_grades.txt");
+    if (!inSS.is_open())
+    {
+        cout << " file not found\n";
+        return 1;
+    }
+    // Variables
+    vector<student> Class;
+    student tempStudent;
     double studentAvg, mid1Sum = 0.0, mid2Sum = 0.0, finalSum = 0.0;
+    string linetext;
+    istringstream lineString;
+
+    while (!inSS.eof() && inSS.good())
+    {
+        getline(inSS, linetext);
+        lineString.clear();
+        lineString.str(linetext);
+
+        lineString >> tempStudent.firstName;
+        lineString >> tempStudent.lastName;
+        lineString >> tempStudent.exam.at(0);
+        lineString >> tempStudent.exam.at(1);
+        lineString >> tempStudent.exam.at(2);
+
+        Class.push_back(tempStudent);
+    }
+    inSS.close();
+
+    ofstream outputFile("studentGradeReport.txt");
 
     for (unsigned int i = 0; i < Class.size(); i++)
     {
-        studentAvg = 0;
+        studentAvg = 0.0;
         studentAvg = (Class.at(i).exam.at(0) + Class.at(i).exam.at(1) + Class.at(i).exam.at(2)) / 3.0;
 
         if (studentAvg >= 90.0)
@@ -47,57 +74,20 @@ int main()
 
     for (unsigned int i = 0; i < Class.size(); i++)
     {
-        cout << Class.at(i).firstName << " ";
-        cout << Class.at(i).lastName << " ";
-        cout << Class.at(i).exam.at(0) << " ";
-        cout << Class.at(i).exam.at(1) << " ";
-        cout << Class.at(i).exam.at(2) << " ";
-        cout << Class.at(i).finalGrade << endl;
+        outputFile << Class.at(i).firstName << " ";
+        outputFile << Class.at(i).lastName << " ";
+        outputFile << Class.at(i).exam.at(0) << " ";
+        outputFile << Class.at(i).exam.at(1) << " ";
+        outputFile << Class.at(i).exam.at(2) << " ";
+        outputFile << Class.at(i).finalGrade << endl;
     }
 
-    cout << fixed << setprecision(2);
-    cout << "Averages: " << endl
-         << "Midterm 1: " << mid1Sum / Class.size() << endl;
-    cout << "Midterm 2: " << mid2Sum / Class.size() << endl;
-    cout << "Final: " << finalSum / Class.size() << endl;
+    outputFile << fixed << setprecision(2);
+    outputFile << "\nAverages: \n"
+               << "Midterm 1: " << mid1Sum / Class.size() << endl;
+    outputFile << "Midterm 2: " << mid2Sum / Class.size() << endl;
+    outputFile << "Final: " << finalSum / Class.size() << endl;
 
+    outputFile.close();
     return 0;
 }
-
-// void initialize_Class(vector<student> &Class)
-// {
-//     Class.at(0).firstName = "Barrett";
-//     Class.at(0).lastName = "Edan";
-//     // Class.at(0).exam = {70, 45, 59};
-//     Class.at(0).exam.at(0) = 70;
-//     Class.at(0).exam.at(1) = 45;
-//     Class.at(0).exam.at(2) = 59;
-
-//     Class.at(1).firstName = "Bradshaw";
-//     Class.at(1).lastName = "Reagan";
-//     // Class.at(1).exam = {96, 97, 88};
-//     Class.at(1).exam.at(0) = 96;
-//     Class.at(1).exam.at(1) = 97;
-//     Class.at(1).exam.at(2) = 88;
-
-//     Class.at(2).firstName = "Charlton";
-//     Class.at(2).lastName = "Caius";
-//     // Class.at(2).exam = {73, 94, 80};
-//     Class.at(2).exam.at(0) = 73;
-//     Class.at(2).exam.at(1) = 94;
-//     Class.at(2).exam.at(2) = 80;
-
-//     Class.at(3).firstName = "Mayo";
-//     Class.at(3).lastName = "Tyrese";
-//     // Class.at(3).exam = {88, 61, 36};
-//     Class.at(3).exam.at(0) = 88;
-//     Class.at(3).exam.at(1) = 61;
-//     Class.at(3).exam.at(2) = 36;
-
-//     Class.at(4).firstName = "Stern";
-//     Class.at(4).lastName = "Brenda";
-//     // Class.at(4).exam = {90, 86, 45};
-//     Class.at(4).exam.at(0) = 90;
-//     Class.at(4).exam.at(1) = 86;
-//     Class.at(4).exam.at(2) = 45;
-// }
