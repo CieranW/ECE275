@@ -1,0 +1,10 @@
+Barrett Edan 70 45 59 F
+Bradshaw Reagan 96 97 88 A
+Charlton Caius 73 94 80 B
+Mayo Tyrese 88 61 36 D
+Stern Brenda 90 86 45 C
+
+Averages: 
+Midterm 1: 83.40
+Midterm 2: 76.60
+Final: 61.60
