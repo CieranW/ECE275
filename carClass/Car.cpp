@@ -15,8 +15,16 @@ int Car::GetModelYear() const
 }
 
 // TODO: Implement SetPurchasePrice() function
+void Car::SetPurchasePrice(int userPrice)
+{
+    purchasePrice = userPrice;
+}
 
 // TODO: Implement GetPurchasePrice() function
+int Car::GetPurchasePrice() const
+{
+    return purchasePrice;
+}
 
 void Car::CalcCurrentValue(int currentYear)
 {
@@ -27,5 +35,10 @@ void Car::CalcCurrentValue(int currentYear)
     currentValue = purchasePrice * pow((1 - depreciationRate), carAge);
 }
 
-// TODO: Implement PrintInfo() function to output modelYear, purchasePrice, and
-// currentValue
+// TODO: Implement PrintInfo() function to output modelYear, purchasePrice, and currentValue
+void Car::PrintInfo() const
+{
+    cout << "Model Year: " << modelYear << endl;
+    cout << "Purchase Price: $" << purchasePrice << endl;
+    cout << "Current Value: $" << currentValue << endl;
+}
