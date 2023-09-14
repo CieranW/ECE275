@@ -4,6 +4,13 @@
 #include "Car.h"
 using namespace std;
 
+// TODO: Assign every variable to 0 in the default constructor
+Car::Car()
+{
+    modelYear = 0;
+    purchasePrice = 0;
+    currentValue = 0;
+}
 void Car::SetModelYear(int userYear)
 {
     modelYear = userYear;

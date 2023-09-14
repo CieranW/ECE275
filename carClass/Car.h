@@ -10,6 +10,9 @@ private:
     double currentValue;
 
 public:
+    // TODO: Create a default constructor
+    Car();
+
     void SetModelYear(int userYear);
 
     int GetModelYear() const;
