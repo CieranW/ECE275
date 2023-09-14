@@ -13,6 +13,8 @@ int main()
     cin >> userPrice;
     cin >> userCurrentYear;
 
+    Car(userYear, userPrice, userCurrentYear);
+
     myCar.SetModelYear(userYear);
     myCar.SetPurchasePrice(userPrice);
     myCar.CalcCurrentValue(userCurrentYear);

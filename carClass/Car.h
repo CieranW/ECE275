@@ -13,6 +13,9 @@ public:
     // TODO: Create a default constructor
     Car();
 
+    // TODO: Additional constructor
+    Car(int modelEntered, int priceEntered, int valueEntered);
+
     void SetModelYear(int userYear);
 
     int GetModelYear() const;

@@ -11,6 +11,15 @@ Car::Car()
     purchasePrice = 0;
     currentValue = 0;
 }
+
+// TODO: Write in Car(int modelEntered, int priceEntered, int valueEntered);
+Car::Car(int modelEntered, int priceEntered, int valueEntered)
+{
+    modelYear = modelEntered;
+    purchasePrice = priceEntered;
+    currentValue = valueEntered;
+}
+
 void Car::SetModelYear(int userYear)
 {
     modelYear = userYear;
