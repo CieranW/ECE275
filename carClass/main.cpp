@@ -13,7 +13,9 @@ int main()
     cin >> userPrice;
     cin >> userCurrentYear;
 
+    // TODO: Check again and verify
     Car(userYear, userPrice, userCurrentYear);
+    // Is it Car ourCar{2300, 1230, 453} ?
 
     myCar.SetModelYear(userYear);
     myCar.SetPurchasePrice(userPrice);
