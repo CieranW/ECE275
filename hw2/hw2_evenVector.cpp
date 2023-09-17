@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 vector<int> RemoveEvens(vector<int> nums)
@@ -8,15 +9,14 @@ vector<int> RemoveEvens(vector<int> nums)
     // Goes through the vector and assigns all even numbers with 0
     for (unsigned int i = 0; i < nums.size(); i++)
     {
-        if (nums[i] % 2 == 0)
+        if (nums.at(i) % 2 == 0)
         {
-            nums[i] = 0;
+            nums.at(i) = 0;
         }
     }
 
     // Removes all instances of 0
-    nums.erase(std::remove(nums.begin(), nums.end(), 0), nums.end());
-
+    nums.erase(remove(nums.begin(), nums.end(), 0), nums.end());
     return nums;
 }
 
