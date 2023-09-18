@@ -20,6 +20,9 @@ class Artist{
    
    private:
       // TODO: Declare private data members - artistName, birthYear, deathYear
+      string artistName;
+      int birthYear;
+      int deathYear;
 
 };
 

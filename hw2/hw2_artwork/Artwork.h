@@ -9,16 +9,19 @@ class Artwork{
 
       Artwork(string title, int yearCreated, Artist artist);
 
-      string GetTitle();
+      string GetTitle() const;
 
-      int GetYearCreated();
+      int GetYearCreated() const;
 
-      void PrintInfo();
+      void PrintInfo() const;
    
    private:
       // TODO: Declare private data members - title, yearCreated
+      string title;
+      int yearCreated;
 
       // TODO: Declare private data member artist of type Artist
+      Artist artist;
 
 };
 
