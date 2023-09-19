@@ -4,6 +4,9 @@ using namespace std;
 // Student class constructor
 Student::Student()
 {
+    firstName = "John";
+    lastName = "Doe";
+    gpa = 1.0;
 }
 Student::Student(string first, string last, double gpa)
 {
