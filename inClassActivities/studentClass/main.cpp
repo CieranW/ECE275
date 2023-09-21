@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include "Course.h"
+#include "course.h"
 using namespace std;
 int main()
 {
