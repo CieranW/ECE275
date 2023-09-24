@@ -13,6 +13,7 @@ string itemDescription - Initialized in default constructor to "none"
 Ex. of PrintItemCost() output:
 
 Bottled Water 10 @ $1 = $10
+
 Ex. of PrintItemDescription() output:
 
 Bottled Water: Deer Park, 12 oz.
