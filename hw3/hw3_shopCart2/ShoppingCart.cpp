@@ -127,3 +127,16 @@ void ShoppingCart::PrintDescriptions()
         cout << cartItems[i].GetName() << ": " << cartItems[i].GetDescription() << endl;
     }
 }
+
+ItemToPurchase ShoppingCart::GetItemByName(const string &itemName) const
+{
+    for (const auto &item : cartItems)
+    {
+        if (item.GetName() == itemName)
+        {
+            return item;
+        }
+    }
+
+    return ItemToPurchase("NOT_FOUND", "", 0, 0); // Item not found
+}

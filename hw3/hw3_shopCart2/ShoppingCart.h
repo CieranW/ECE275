@@ -24,6 +24,8 @@ public:
     void PrintTotal();
     void PrintDescriptions();
 
+    ItemToPurchase GetItemByName(const string &itemName) const;
+
 private:
     string customerName;
     string currentDate;

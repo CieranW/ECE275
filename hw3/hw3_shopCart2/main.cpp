@@ -108,11 +108,28 @@ void ExecuteMenu(char option, ShoppingCart &theCart)
         cout << "CHANGE ITEM QUANTITY\n";
         cout << "Enter the item name:\n";
         getline(cin, itemName);
+        // TODO: Somehow recall the item's description and price through the name.
+        // Find the item in the cart based on its name
+        ItemToPurchase modifiedItem = theCart.GetItemByName(itemName);
+        itemDescription = modifiedItem.GetDescription();
+        itemPrice = modifiedItem.GetPrice();
+
         cout << "Enter the new quantity:\n";
         cin >> itemQuantity;
-        // TODO: Somehow recall the item's description and price through the name.
-        ItemToPurchase modifiedItem(itemName, itemDescription, itemPrice, itemQuantity);
-        theCart.ModifyItem(modifiedItem);
+        // Check if the item was found
+        if (modifiedItem.GetName() != "NOT_FOUND")
+        {
+            modifiedItem.SetQuantity(itemQuantity);
+            // Update the item's quantity
+            ItemToPurchase modifiedItem(itemName, itemDescription, itemPrice, itemQuantity);
+
+            // Modify the item in the cart
+            theCart.ModifyItem(modifiedItem);
+        }
+        else
+        {
+            cout << "Item not found in cart. Nothing modified." << endl;
+        }
         break;
     }
     case 'i':
