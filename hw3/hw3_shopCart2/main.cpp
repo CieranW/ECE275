@@ -26,5 +26,9 @@ int main()
     cout << "Enter today's date:\n";
     getline(cin, date);
 
+    // Prints out the above information
+    cout << "Customer name: " << name << endl;
+    cout << "Today's date: " << date << endl;
+
     return 0;
 }
