@@ -1,5 +1,5 @@
-#ifndef ITEM_TO_PURCHASE_H
-#define ITEM_TO_PURCHASE_H
+#ifndef ITEMTOPURCHASE_H
+#define ITEMTOPURCHASE_H
 
 #include <string>
 using namespace std;
@@ -9,7 +9,7 @@ class ItemToPurchase
 {
 public:
     ItemToPurchase();
-    ItemToPurchase(string name, int price, int quantity, string description);
+    ItemToPurchase(string name, string description, int price, int quantity);
 
     void SetName(string name);
     void SetPrice(int price);

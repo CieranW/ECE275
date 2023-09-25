@@ -1,5 +1,5 @@
-#ifndef SHOPPING_CART_H
-#define SHOPPING_CART_H
+#ifndef SHOPPINGCART_H
+#define SHOPPINGCART_H
 
 #include <string>
 #include <vector>
@@ -10,7 +10,7 @@ class ShoppingCart
 {
 public:
     ShoppingCart();
-    ShoppingCart(strind name, string date);
+    ShoppingCart(string name, string date);
 
     string GetCustomerName() const;
     string GetDate() const;

@@ -12,7 +12,7 @@ ItemToPurchase::ItemToPurchase()
     itemDescription = "none";
 }
 
-ItemToPurchase::ItemToPurchase(string name, int price, int quantity, string description)
+ItemToPurchase::ItemToPurchase(string name, string description, int price, int quantity)
 {
     this->itemName = name;
     this->itemPrice = price;

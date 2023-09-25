@@ -1,55 +1,68 @@
 #include <iostream>
 #include <iomanip>
+#include <limits>
 using namespace std;
 
 #include "ShoppingCart.h"
 #include "ItemToPurchase.h"
 
-void PrintMenu(ShoppingCart item)
+void ExecuteMenu(char option, ShoppingCart &theCart);
+
+void PrintMenu(ShoppingCart &theCart)
 {
     char option;
+    bool repeatPrompt = false;
     /* Type your code here */
-    while (1)
+    while (true)
     {
-        // Menu options printed
-        cout << "a - Add item to cart\n";
-        cout << "d - Remove item from cart\n";
-        cout << "c - Change item quantity\n";
-        cout << "i - Output items' descriptions\n";
-        cout << "o - Output shopping cart\n";
-        cout << "q - Quit\n";
-
-        // Get user option based on above menu
-        cout << "\nChoose an option:\n";
-        cin >> option;
-        // Switch options
-        switch (option)
+        if (repeatPrompt)
         {
-        case 'a':
-            // Call AddItem()
-            AddItem();
-            break;
-        case 'd':
-            // Call RemoveItem()
-            RemoveItem();
-            break;
-        case 'c':
-            // Call ModifyItem()
-            ModifyItem();
-            break;
-        case 'i':
-            // Call PrintDescriptions()
-            PrintDescriptions();
-            break;
-        case 'o':
-            // Call PrintCart()
-            PrintTotal();
-            break;
-        case 'q':
+            cout << "\nChoose an option:";
+            repeatPrompt = false; // Reset the flag
+        }
+        else
+        {
+            // Menu options printed
+            cout << "MENU\n";
+            cout << "a - Add item to cart\n";
+            cout << "d - Remove item from cart\n";
+            cout << "c - Change item quantity\n";
+            cout << "i - Output items' descriptions\n";
+            cout << "o - Output shopping cart\n";
+            cout << "q - Quit\n";
+
+            // Get user option based on above menu
+            cout << "\nChoose an option:";
+        }
+
+        cin >> option;
+
+        // If q is called, exit loop
+        if (option == 'q')
+        {
+            cout << endl;
             return;
-        default:
-            cout << "Invalid option - pick another\n";
-            break;
+        }
+        else
+        {
+            switch (option)
+            {
+            // Else call ExecuteMenu() to implement the options listed
+            case 'a':
+            case 'd':
+            case 'c':
+            case 'i':
+            case 'o':
+                cout << endl;
+                ExecuteMenu(option, theCart);
+                break;
+
+            default:
+                repeatPrompt = true; // Set the flag to repeat the prompt
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                break;
+            }
         }
     }
 }
@@ -57,6 +70,64 @@ void PrintMenu(ShoppingCart item)
 void ExecuteMenu(char option, ShoppingCart &theCart)
 {
     /* Type your code here */
+    string itemName, itemDescription;
+    int itemPrice, itemQuantity;
+    switch (option)
+    {
+    case 'a':
+    {
+        // Implement AddItem()
+        cin.ignore(); // Clear buffer
+        cout << "ADD ITEM TO CART\n";
+        cout << "Enter the item name:\n";
+        getline(cin, itemName);
+        cout << "Enter the item description:\n";
+        getline(cin, itemDescription);
+        cout << "Enter the item price:\n";
+        cin >> itemPrice;
+        cout << "Enter the item quantity:\n";
+        cin >> itemQuantity;
+        ItemToPurchase newItem(itemName, itemDescription, itemPrice, itemQuantity);
+        theCart.AddItem(newItem);
+        break;
+    }
+    case 'd':
+    {
+        // Implement RemoveItem()
+        cout << "REMOVE ITEM FROM CART\n";
+        cout << "Enter name of item to remove:\n";
+        cin.ignore(); // Clear buffer
+        getline(cin, itemName);
+        theCart.RemoveItem(itemName);
+        break;
+    }
+    case 'c':
+    {
+        // Implement ModifyItem()
+        cin.ignore(); // Clear buffer
+        cout << "CHANGE ITEM QUANTITY\n";
+        cout << "Enter the item name:\n";
+        getline(cin, itemName);
+        cout << "Enter the new quantity:\n";
+        cin >> itemQuantity;
+        // TODO: Somehow recall the item's description and price through the name.
+        ItemToPurchase modifiedItem(itemName, itemDescription, itemPrice, itemQuantity);
+        theCart.ModifyItem(modifiedItem);
+        break;
+    }
+    case 'i':
+        // Call PrintDescriptions()
+        cout << "OUTPUT ITEMS' DESCRIPTIONS";
+        theCart.PrintDescriptions();
+        break;
+
+    case 'o':
+        // Call PrintCart()
+        cout << "OUTPUT SHOPPING CART";
+        theCart.PrintTotal();
+        break;
+    }
+    cout << endl;
 }
 
 int main()
@@ -72,10 +143,14 @@ int main()
     getline(cin, date);
 
     // Prints out the above information
-    cout << "Customer name: " << name << endl;
-    cout << "Today's date: " << date << endl;
+    cout << "\nCustomer name: " << name << endl;
+    cout << "Today's date: " << date << endl
+         << endl;
 
-    // Calling PrintMenu()
-    PrintMenu();
+    // Adding name and date to cart
+    ShoppingCart cart(name, date);
+
+    // Calling PrintMenu
+    PrintMenu(cart);
     return 0;
 }
