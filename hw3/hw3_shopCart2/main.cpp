@@ -17,6 +17,14 @@ void ExecuteMenu(char option, ShoppingCart &theCart)
 int main()
 {
     /* Type your code here */
+    // Variables
+    string name, date;
+
+    // Prompt user for customer name and the date.
+    cout << "Enter customer's name:\n";
+    getline(cin, name);
+    cout << "Enter today's date:\n";
+    getline(cin, date);
 
     return 0;
 }
