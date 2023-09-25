@@ -3,10 +3,55 @@
 using namespace std;
 
 #include "ShoppingCart.h"
+#include "ItemToPurchase.h"
 
-void PrintMenu()
+void PrintMenu(ShoppingCart item)
 {
+    char option;
     /* Type your code here */
+    while (1)
+    {
+        // Menu options printed
+        cout << "a - Add item to cart\n";
+        cout << "d - Remove item from cart\n";
+        cout << "c - Change item quantity\n";
+        cout << "i - Output items' descriptions\n";
+        cout << "o - Output shopping cart\n";
+        cout << "q - Quit\n";
+
+        // Get user option based on above menu
+        cout << "\nChoose an option:\n";
+        cin >> option;
+        // Switch options
+        switch (option)
+        {
+        case 'a':
+            // Call AddItem()
+            AddItem();
+            break;
+        case 'd':
+            // Call RemoveItem()
+            RemoveItem();
+            break;
+        case 'c':
+            // Call ModifyItem()
+            ModifyItem();
+            break;
+        case 'i':
+            // Call PrintDescriptions()
+            PrintDescriptions();
+            break;
+        case 'o':
+            // Call PrintCart()
+            PrintTotal();
+            break;
+        case 'q':
+            return;
+        default:
+            cout << "Invalid option - pick another\n";
+            break;
+        }
+    }
 }
 
 void ExecuteMenu(char option, ShoppingCart &theCart)
@@ -30,5 +75,7 @@ int main()
     cout << "Customer name: " << name << endl;
     cout << "Today's date: " << date << endl;
 
+    // Calling PrintMenu()
+    PrintMenu();
     return 0;
 }
