@@ -1,0 +1,162 @@
+Requirements Summary
+
+Create a C++ program that first reads the data from the inputFile and produces a smoothed curve of timestamped distance data, with annotations to denote significant changes in the angle of detection, or distance to detect object. The resulting timestamped data (with annotations) should be placed in the outputFile.
+
+Data description and motivation
+The data in the inputFile are simplified information from a front-mounted LIDAR sensor on board an autonomous vehicle. All data presented in test files are collected from the CAT Vehicle Testbed at the University of Arizona (Dr. Jonathan Sprinkle’s research).
+
+Through the use of this distance, angle, and timing information, the distance between the CAT Vehicle and its nearest obstacle can be inferred; differentiating this data provides velocity and acceleration information---but unfortunately the noise in the data prevents the direct application of a differential operator. Thus, the goal of this project is to smooth the data, so that it can be more suitable for estimating relative velocity.
+
+Additional info: Data are collected at a frequency of 75 Hz, and each data point consists of 181 samples of distance information that scan an arc of pi radians, with time information that indicates the computer time at which the computer recorded the data from the sensor. Each pulse of the laser returns a distance (in meters) of any reflection it encounters; if no reflection is detected, then the maximum range of the sensor is returned---81m. A separate software component has already analyzed this hemispherical scan, and found the smallest distance value for each sample, and its index in the vector of length 181. Through the index number, the angle (in radians) of the nearest sample is returned.
+
+Input file format
+The input log consists of a timestamp, followed by distance (in meters) and then angle information (in radians).
+
+TTTTT.TTT,DD.DD,A.AAA
+Each line is separated by a newline. The following is a simple example of the inputFile format:
+
+1464815342.110273122787, 17.889999389648, 0.095994234085
+1464815342.123246669769, 17.920000076294, 0.087267547846
+1464815342.137223720551, 17.889999389648, 0.095994234085
+1464815342.150209188461, 17.920000076294, 0.087267547846
+1464815342.163207292557, 17.909999847412, 0.095994234085
+1464815342.177282094955, 17.920000076294, 0.087267547846
+1464815342.189191341400, 17.909999847412, 0.095994234085
+1464815342.204182624817, 17.909999847412, 0.087267547846
+1464815342.217026233673, 17.899999618530, 0.095994234085
+1464815342.230037212372, 17.920000076294, 0.087267547846
+1464815342.243027210236, 17.909999847412, 0.095994234085
+
+
+The input data times may have minor jitter, i.e., on average the frequency is 75 Hz, but is not guaranteed to always be 1/75 seconds apart. You should ensure that your program will not crash at runtime, for example due to issues such as opening an empty file, or the file is not found.
+
+The maximum distance is 81.0m, and the default angle if no obstacle is found is -pi/2 rad (i.e., less than -1.570).
+
+Data structures
+The following data structure and enumerated type should be used for storing and filtering data.
+
+
+// This enumerated type provides entries for each of the
+// potential labels attached to a sample
+enum FilterStatus { UNDEFINED=-1, VALID, FILTERED, ANGLE_RESET, DISTANCE_RESET };
+
+// This struct is used to print out the filtered data and can also be used to store data from the read files
+typedef struct obstacleDataSample_struct {
+    double timestamp;
+    double distance;
+    double angle;
+    FilterStatus status;
+} obstacleDataSample;
+
+
+You may define other structures and types as you see fit.
+
+Valid data points
+The filter will be applied to only valid data points. Before the data can be filtered, each data point needs to be classified.
+
+A data point is determined to be valid when compared to the previous data point. The relative distance must be strictly less than the specified tolerance of 0.1 m (e.g., |distance(i) – distance(i-1)| < 0.1), and the relative angle must be strictly less than 15 degrees (e.g., |angle(i) – angle(i-1)| < 15 degrees). 
+Use pi = 3.141592653589793238 (or M_PI in cmath library) to do a degree conversion.
+
+Use the following rules to classify each data point:
+
+The first element is always UNDEFINED
+If the data point has the default angle(-pi/2) or the maximum distance (81.0), the data point is labeled UNDEFINED
+If the angle between 2 points exceeds the angle maximum tolerance (15 degrees), the data point is labeled ANGLE RESET.
+If it is within the angular tolerance but the distance between 2 points exceeds the distance maximum tolerance (0.1 m), then the current point is given DISTANCE RESET.
+If it is within the distance and angular tolerance, the data point is labeled VALID.
+If it is not within either distance or angle tolerance of a previous data point, and is not at the maximum distance or default angle, it is given ANGLE RESET.
+If it is a filtered data point, it is labeled FILTERED. Note: this should be done at the time that the filter occurs. See the example below.
+
+
+For example, consider the subset of values below:
+
+0,1.03,0.05840
+0.01333,1.01,0.05840
+0.02667,1.1,0.05840
+0.04,1.04,0.05840
+0.05333,1,0.05840
+0.06667,0.979,0.05840
+0.08,0.958,0.05840
+0.09333,0.937,0.05840
+0.10667,0.916,0.05840
+0.12,0.895,0.05840
+0.13333,0.874,0.05840
+0.14667,0.824,0.05840
+0.16,0.798,0.05840
+
+
+After going through labeling status, it should be:
+
+0.000000,1.030000,0.058400,UNDEFINED
+0.013330,1.010000,0.058400,VALID
+0.026670,1.100000,0.058400,VALID
+0.040000,1.040000,0.058400,VALID
+0.053330,1.000000,0.058400,VALID
+0.066670,0.979000,0.058400,VALID
+0.080000,0.957545,0.058400,VALID
+0.093330,0.938273,0.058400,VALID
+0.106670,0.916000,0.058400,VALID
+0.120000,0.895000,0.058400,VALID
+0.133330,0.874000,0.058400,VALID
+0.146670,0.824000,0.058400,VALID
+
+
+Filter algorithm
+The only data value which is being filtered is the distance; the filter is an average of all distance points across the width of the filter, which is defined at compile time as 11 data points (FILTER_WIDTH = 11). The filtered value is the center of this filtering window. For example, consider the subset of values below (Observe that it is the same data set as above and every data point is valid except the first element that is always UNDEFINED):
+
+
+Ex.
+0,1.03,0.05840
+0.01333,1.01,0.05840
+0.02667,1.1,0.05840
+0.04,1.04,0.05840
+0.05333,1,0.05840
+0.06667,0.979,0.05840
+0.08,0.958,0.05840
+0.09333,0.937,0.05840
+0.10667,0.916,0.05840
+0.12,0.895,0.05840
+0.13333,0.874,0.05840
+0.14667,0.824,0.05840
+0.16,0.798,0.05840
+
+
+For the above example, the average distance 0.957545 m would be valid for time 0.08 and the average distance 0.938273 would be valid for time 0.09333.
+
+The value 0.957545 is from averaging of 1.01, 1.1, 1.04, 1.0, 0.979, 0.958, 0.937, 0.916, 0.895, 0.874, 0.824.
+The value 0.938273 is from averaging of 1.1, 1.04, 1.0, 0.979, 0.958, 0.937, 0.916, 0.895, 0.874, 0.824, 0.798.
+Observe that the existing data points are used with the filter.
+
+The filter should be run only when the full filter window of valid points is available; otherwise, the existing distance is used. Angle data are not filtered, but are used to determine validity. An example result (in the appropriate file format) if these were the only data points in the file would be:
+
+
+Ex. 
+0.000000,1.030000,0.058400,UNDEFINED
+0.013330,1.010000,0.058400,VALID
+0.026670,1.100000,0.058400,VALID
+0.040000,1.040000,0.058400,VALID
+0.053330,1.000000,0.058400,VALID
+0.066670,0.979000,0.058400,VALID
+0.080000,0.957545,0.058400,FILTERED
+0.093330,0.938273,0.058400,FILTERED
+0.106670,0.916000,0.058400,VALID
+0.120000,0.895000,0.058400,VALID
+0.133330,0.874000,0.058400,VALID
+0.146670,0.824000,0.058400,VALID
+
+
+Output file format
+The output file should be in the same format as the input file, of lines of text each of which is followed by a new line. There should be one additional entry per line that indicates the status of each data point. These are represented as data that may be used in filtering (VALID), filtered valid data with (FILTERED), marks a new position due to a significant change in angle (ANGLE RESET), a significant step in distance (DISTANCE RESET), or that the sample is undefined (UNDEFINED), as text outputs.
+
+
+Ex. 
+TTTTT.TTTTTT,DD.DDDDDD,A.AAAAAA,STATUS
+
+
+All numerical values should be printed with setprecision(6) of a C++ stream. The last line in the output file should end with a new line.
+
+Files
+obstacleDataSample.h contains FilterStatus enum and obstacleDataSample struct
+obstacleDtaSample.ccp is used with obstacleDataSample.h
+main.cpp
+project1.cpp and project1.h are optional (you can use them if you prefer). If you do not use them, just submit the blank files.
