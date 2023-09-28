@@ -1,0 +1,21 @@
+Step 1 - Read data
+
+Read in data from a .txt file. Data is in the form of (Timestamp, Distance, Angle) with distance being measured in meters and angle in radians. Maximum distance is 81 meters and default angle is -pi/2. 
+
+Step 2 - Is the data valid?
+
+Classify the data by passing it through a function that reads the data and assigns it a status based on the data meeting the conditions. projectInstruction.txt has the details for determining the validity of the data. 
+
+Data has to be classified before it can be filtered. 
+
+Step 3 - Filter data
+
+Filter the data given a filter width (fixed at 11). 
+
+Filtered value is center of the filtering window. 
+
+Filter only runs when the full window is available. Ie. is the dataset long enough to fit the filter width and be filtered. 
+
+Step 4 - Output data    
+
+Output the data to another file with the following format: (Timestamp, Distance, Angle, Status). Status comes from the classification process. 
