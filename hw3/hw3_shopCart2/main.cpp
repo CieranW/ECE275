@@ -120,7 +120,8 @@ void ExecuteMenu(char option, ShoppingCart &theCart)
         if (modifiedItem.GetName() != "NOT_FOUND")
         {
             modifiedItem.SetQuantity(itemQuantity);
-            // Update the item's quantity
+            // TODO: Setname as well. Don't need to call in all the other stuff: price, description
+            //  Update the item's quantity
             ItemToPurchase modifiedItem(itemName, itemDescription, itemPrice, itemQuantity);
 
             // Modify the item in the cart
