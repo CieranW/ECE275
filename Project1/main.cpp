@@ -51,6 +51,10 @@ int main(void)
     cout << endl
          << endl;
 
+    Filter(data);
+    // Reclassify the new data
+    Classify(data);
+
     for (size_t i = 0; i < data.size(); i++)
     {
         obstacleDataSample tempData = data[i];

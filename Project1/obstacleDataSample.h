@@ -33,6 +33,6 @@ string printSample(obstacleDataSample sample);
 // add your own functions (if prefer)
 int ReadFile(string fileName, vector<obstacleDataSample> &data);
 void Classify(vector<obstacleDataSample> &data);
-void Filter(vector<obstacleDataSample> &data);
+int Filter(vector<obstacleDataSample> &data);
 
 #endif /* obstacleData_hpp */

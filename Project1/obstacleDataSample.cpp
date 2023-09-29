@@ -7,6 +7,8 @@
 #include <vector>
 #include <cmath>
 
+#define FILTER_WIDTH 11
+
 int ReadFile(string inputFileName, vector<obstacleDataSample> &data)
 {
     ifstream inFile(inputFileName);
@@ -90,13 +92,57 @@ void Classify(vector<obstacleDataSample> &data)
     }
 }
 
-void Filter(vector<obstacleDataSample> &data)
+int Filter(vector<obstacleDataSample> &data)
 {
+    vector<obstacleDataSample> tempData;
+    int filterStart, filterEnd;
+
+    for (size_t i = 0; i < data.size(); i++)
+    {
+        // Checks to see if the data has been classified as valid and pushes it to tempData for filtering
+        if (data[i].status == 0)
+        {
+            tempData[i] = data[i];
+        }
+    }
+
+    // If the dataset is smaller than the filter width, stop and return the original dataset, unfiltered
+    if (tempData.size() < FILTER_WIDTH)
+    {
+        return 1;
+    }
+
+    else
+    {
+        filterStart = FILTER_WIDTH / 2;
+        filterEnd = tempData.size() - filterStart;
+
+        int size = tempData.size();
+        double sum = 0.0;
+        for (int i = 0; i < size; ++i)
+        {
+            // Filters the data by the elements within the desired range so that there are no errors/unaccessible data points
+            if (i >= filterStart && i < filterEnd)
+            {
+                sum = 0.0;
+                // At a certain element position, accesses all the data points within the filter width to add towards the sum for avg calc
+                for (int j = (i - filterStart); j <= (i + filterStart); j++)
+                {
+                    sum += tempData[j].distance;
+                }
+            }
+            else
+            {
+            }
+        }
+    }
+
+    return 0;
 }
 
 string printSample(obstacleDataSample sample)
 {
-    // cout << sample.timestamp << " " << sample.distance << " " << sample.angle << " ";
+    // Accesses the status in each data point and characterizes it into a string
     string status, fullLine;
     switch (sample.status)
     {
@@ -116,6 +162,7 @@ string printSample(obstacleDataSample sample)
         status = "DISTANCE_RESET";
         break;
     }
+    // Combines all the information in a data point into one line, outputting with commas
     fullLine = to_string(sample.timestamp) + ", " + to_string(sample.distance) + ", " + to_string(sample.angle) + ", " + status;
     return fullLine;
 }
