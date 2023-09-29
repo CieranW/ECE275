@@ -51,43 +51,71 @@ void Classify(vector<obstacleDataSample> &data)
         {
             data[i].status = UNDEFINED;
         }
-
-        // If the distance or angle are equal to the max distance or default angle, status is UNDEFINDED
-        if (data[i].distance == MAX_DIST || data[i].angle == ANGLE_DEFAULT)
+        else
         {
-            data[i].status = UNDEFINED;
-        }
+            // If the distance or angle are equal to the max distance or default angle, status is UNDEFINDED
+            if (data[i].distance == MAX_DIST || data[i].angle == ANGLE_DEFAULT)
+            {
+                data[i].status = UNDEFINED;
+            }
 
-        // Assigns angleDiff (in degrees) the difference between the current and previous data point, also converts radians into degrees.
-        double angleDiff = (data[i].angle - data[i - 1].angle) * (180.0 / M_PI);
-        // Checks to see if the angle difference is within tolerance of 15 degrees, status assigned ANGLE_RESET
-        if (i != 0 && (angleDiff > 15))
-        {
-            data[i].status = ANGLE_RESET;
-        }
+            // Assigns angleDiff (in degrees) the difference between the current and previous data point, also converts radians into degrees.
+            double angleDiff = fabs((data[i].angle - data[i - 1].angle) * (180.0 / M_PI));
+            // Checks to see if the angle difference is within tolerance of 15 degrees, status assigned ANGLE_RESET
+            if ((angleDiff > 15))
+            {
+                data[i].status = ANGLE_RESET;
+            }
 
-        // Assigns distDiff the difference between current and previous data points
-        double distDiff = data[i].distance - data[i - 1].distance;
-        // Checks to see if the distance difference is within tolerance of 0.1 meters, status assigned DISTANCE_RESET
-        if (i != 0 && (distDiff > 0.1))
-        {
-            data[i].status = DISTANCE_RESET;
-        }
+            // Assigns distDiff the difference between current and previous data points
+            double distDiff = fabs(data[i].distance - data[i - 1].distance);
+            // Checks to see if the distance difference is within tolerance of 0.1 meters, status assigned DISTANCE_RESET
+            if ((distDiff > 0.1))
+            {
+                data[i].status = DISTANCE_RESET;
+            }
 
-        // If both the distance and angle differences are within the tolerance limit (0.1 meters and 15 degrees respectively), status is assigned VALID
-        if (distDiff < 0.1 && angleDiff < 15)
-        {
-            data[i].status = VALID;
-        }
+            // If both the distance and angle differences are within the tolerance limit (0.1 meters and 15 degrees respectively), status is assigned VALID
+            if (distDiff < 0.1 && angleDiff < 15)
+            {
+                data[i].status = VALID;
+            }
 
-        // If either the distance or angle difference are greater than the tolerance, and the angle or distance are not the max distance or default angle, status is assigned ANGLE_RESET
-        if ((distDiff > 0.1 || angleDiff > 15) && (data[i].angle != ANGLE_DEFAULT || data[i].distance != MAX_DIST))
-        {
-            data[i].status = ANGLE_RESET;
+            // If either the distance or angle difference are greater than the tolerance, and the angle or distance are not the max distance or default angle, status is assigned ANGLE_RESET
+            if ((distDiff > 0.1 || angleDiff > 15) && (data[i].angle != ANGLE_DEFAULT || data[i].distance != MAX_DIST))
+            {
+                data[i].status = ANGLE_RESET;
+            }
         }
     }
 }
 
 void Filter(vector<obstacleDataSample> &data)
 {
+}
+
+string printSample(obstacleDataSample sample)
+{
+    // cout << sample.timestamp << " " << sample.distance << " " << sample.angle << " ";
+    string status, fullLine;
+    switch (sample.status)
+    {
+    case -1:
+        status = "UNDEFINED";
+        break;
+    case 0:
+        status = "VALID";
+        break;
+    case 1:
+        status = "FILTERED";
+        break;
+    case 2:
+        status = "ANGLE_RESET";
+        break;
+    case 3:
+        status = "DISTANCE_RESET";
+        break;
+    }
+    fullLine = to_string(sample.timestamp) + ", " + to_string(sample.distance) + ", " + to_string(sample.angle) + ", " + status;
+    return fullLine;
 }

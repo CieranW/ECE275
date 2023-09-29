@@ -26,8 +26,6 @@ typedef struct obstacleDataSample_struct
     double distance;
     double angle;
     FilterStatus status;
-
-    // vector<obstacleDataSample> data;
 } obstacleDataSample;
 
 string printSample(obstacleDataSample sample);

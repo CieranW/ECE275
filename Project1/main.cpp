@@ -25,21 +25,38 @@ using namespace std;
 
 int main(void)
 {
-    string inputFileName = "inputFile9.txt";   // Do NOT change the name "inputFileName" since used above
-    string outputFileName = "outputFile9.txt"; // Do NOT change the name "outputFileName" since used above
+    string inputFileName = "inputFile8.txt";   // Do NOT change the name "inputFileName" since used above
+    string outputFileName = "outputFile8.txt"; // Do NOT change the name "outputFileName" since used above
 
     // Add your code //
     // Variables
     vector<obstacleDataSample> data;
-    int fileSize;
-    // Open file
-    ifstream inSS;
-    ofstream outSS;
 
-    fileSize = ReadFile(inputFileName, data);
+    ReadFile(inputFileName, data);
     for (size_t i = 0; i < data.size(); i++)
     {
+        cout << fixed << setprecision(6);
         cout << data[i].timestamp << " " << data[i].distance << " " << data[i].angle << endl;
+    }
+    cout << endl
+         << endl;
+
+    Classify(data);
+    for (size_t i = 0; i < data.size(); i++)
+    {
+        cout << fixed << setprecision(6);
+        cout << data[i].timestamp << " " << data[i].distance << " " << data[i].angle << " " << data[i].status << endl;
+    }
+
+    cout << endl
+         << endl;
+
+    for (size_t i = 0; i < data.size(); i++)
+    {
+        obstacleDataSample tempData = data[i];
+        string output;
+        output = printSample(tempData);
+        cout << output << endl;
     }
     return 0;
 }
