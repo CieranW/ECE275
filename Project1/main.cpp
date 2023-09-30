@@ -25,8 +25,8 @@ using namespace std;
 
 int main(void)
 {
-    string inputFileName = "inputFile8.txt";   // Do NOT change the name "inputFileName" since used above
-    string outputFileName = "outputFile8.txt"; // Do NOT change the name "outputFileName" since used above
+    string inputFileName = "inputFile9.txt";   // Do NOT change the name "inputFileName" since used above
+    string outputFileName = "outputFile9.txt"; // Do NOT change the name "outputFileName" since used above
 
     // Add your code //
     // Variables
@@ -52,9 +52,6 @@ int main(void)
          << endl;
 
     Filter(data);
-    // Reclassify the new data
-    Classify(data);
-
     for (size_t i = 0; i < data.size(); i++)
     {
         obstacleDataSample tempData = data[i];

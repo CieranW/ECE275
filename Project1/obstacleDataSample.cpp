@@ -102,7 +102,7 @@ int Filter(vector<obstacleDataSample> &data)
         // Checks to see if the data has been classified as valid and pushes it to tempData for filtering
         if (data[i].status == 0)
         {
-            tempData[i] = data[i];
+            tempData.push_back(data[i]);
         }
     }
 
@@ -130,9 +130,26 @@ int Filter(vector<obstacleDataSample> &data)
                 {
                     sum += tempData[j].distance;
                 }
+                tempData[i].distance = sum / FILTER_WIDTH;
+                tempData[i].status = FILTERED;
             }
             else
             {
+                tempData[i].distance = tempData[i].distance;
+            }
+        }
+
+        // Reassigns the filtered data to the original dataset
+        for (size_t i = 0; i < data.size(); ++i)
+        {
+            for (size_t j = 0; j < tempData.size(); ++j)
+            {
+                if ((data[i].timestamp == tempData[j].timestamp) && (data[i].status == 0))
+                {
+                    data[i].distance = tempData[j].distance;
+                    data[i].status = tempData[j].status;
+                    break;
+                }
             }
         }
     }
