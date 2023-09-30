@@ -14,6 +14,8 @@ int ReadFile(string inputFileName, vector<obstacleDataSample> &data)
 {
     ifstream inFile(inputFileName);
     string linetext;
+    istringstream lineString(linetext);
+    obstacleDataSample tempData;
 
     // Check if the file is open
     if (!inFile.is_open())
@@ -23,20 +25,24 @@ int ReadFile(string inputFileName, vector<obstacleDataSample> &data)
     }
 
     // Read each line and extract the data
-    while (getline(inFile, linetext))
+    while (!inFile.eof() && inFile.good())
     {
-        // Remove commas from the linetext
-        linetext.erase(remove(linetext.begin(), linetext.end(), ','), linetext.end());
-        // Alternative way to remove commas from the linetext, uncomment below when submitting to the testing program. Comment out when running on your local machine.
-        // linetext.erase(remove_if(linetext.begin(), linetext.end(), [](char c)
-        //                          { return c == ','; }),
-        //                linetext.end());
+        getline(inFile, linetext);
+        lineString.clear();
+        lineString.str(linetext);
 
-        istringstream lineString(linetext);
-        obstacleDataSample tempData;
+        string value;
 
         lineString >> tempData.timestamp;
+        if (getline(lineString, value, ','))
+        {
+            lineString.ignore();
+        }
         lineString >> tempData.distance;
+        if (getline(lineString, value, ','))
+        {
+            lineString.ignore();
+        }
         lineString >> tempData.angle;
 
         data.push_back(tempData);
