@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <algorithm>
 
 #define FILTER_WIDTH 11
 
@@ -25,7 +26,10 @@ int ReadFile(string inputFileName, vector<obstacleDataSample> &data)
     while (getline(inFile, linetext))
     {
         // Remove commas from the linetext
-        linetext.erase(remove(linetext.begin(), linetext.end(), ','), linetext.end());
+        // linetext.erase(remove(linetext.begin(), linetext.end(), ','), linetext.end());
+        linetext.erase(remove_if(linetext.begin(), linetext.end(), [](char c)
+                                 { return c == ','; }),
+                       linetext.end());
 
         istringstream lineString(linetext);
         obstacleDataSample tempData;
