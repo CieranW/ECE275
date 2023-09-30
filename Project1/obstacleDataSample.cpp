@@ -26,11 +26,11 @@ int ReadFile(string inputFileName, vector<obstacleDataSample> &data)
     while (getline(inFile, linetext))
     {
         // Remove commas from the linetext
-        // linetext.erase(remove(linetext.begin(), linetext.end(), ','), linetext.end());
+        linetext.erase(remove(linetext.begin(), linetext.end(), ','), linetext.end());
         // Alternative way to remove commas from the linetext, uncomment below when submitting to the testing program. Comment out when running on your local machine.
-        linetext.erase(remove_if(linetext.begin(), linetext.end(), [](char c)
-                                 { return c == ','; }),
-                       linetext.end());
+        // linetext.erase(remove_if(linetext.begin(), linetext.end(), [](char c)
+        //                          { return c == ','; }),
+        //                linetext.end());
 
         istringstream lineString(linetext);
         obstacleDataSample tempData;
