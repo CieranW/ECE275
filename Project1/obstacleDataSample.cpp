@@ -13,9 +13,6 @@
 int ReadFile(string inputFileName, vector<obstacleDataSample> &data)
 {
     ifstream inFile(inputFileName);
-    string linetext;
-    istringstream lineString(linetext);
-    obstacleDataSample tempData;
 
     // Check if the file is open
     if (!inFile.is_open())
@@ -24,25 +21,19 @@ int ReadFile(string inputFileName, vector<obstacleDataSample> &data)
         return 1;
     }
 
-    // Read each line and extract the data
-    while (!inFile.eof() && inFile.good())
-    {
-        getline(inFile, linetext);
-        lineString.clear();
-        lineString.str(linetext);
+    string linetext;
+    string value;
+    obstacleDataSample tempData;
 
-        string value;
+    // Read each line and extract the data
+    while (getline(inFile, linetext))
+    {
+        istringstream lineString(linetext);
 
         lineString >> tempData.timestamp;
-        if (getline(lineString, value, ','))
-        {
-            lineString.ignore();
-        }
+        getline(lineString, value, ',');
         lineString >> tempData.distance;
-        if (getline(lineString, value, ','))
-        {
-            lineString.ignore();
-        }
+        getline(lineString, value, ',');
         lineString >> tempData.angle;
 
         data.push_back(tempData);
