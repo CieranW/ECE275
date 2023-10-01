@@ -132,9 +132,11 @@ int Filter(vector<obstacleDataSample> &data)
                 {
                     sum += tempData[j].distance;
                 }
+                // Assigns the filtered data to the tempData vector and updates the status to FILTERED
                 tempData[i].distance = sum / FILTER_WIDTH;
                 tempData[i].status = FILTERED;
             }
+            // If the data point is not within the filter range, the distance is kept the same and the status is kept VALID
             else
             {
                 tempData[i].distance = tempData[i].distance;
@@ -144,6 +146,7 @@ int Filter(vector<obstacleDataSample> &data)
         // Reassigns the filtered data to the original dataset
         for (size_t i = 0; i < data.size(); ++i)
         {
+            // Checks to see if the timestamp and status are the same, then assigns the distance and status to the original dataset
             for (size_t j = 0; j < tempData.size(); ++j)
             {
                 if ((data[i].timestamp == tempData[j].timestamp) && (data[i].status == 0))
