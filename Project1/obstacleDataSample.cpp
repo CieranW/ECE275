@@ -74,7 +74,7 @@ void Classify(vector<obstacleDataSample> &data)
             // Assigns distDiff the difference between current and previous data points
             double distDiff = fabs(data[i].distance - data[i - 1].distance);
             // Checks to see if the distance difference is within tolerance of 0.1 meters, status assigned DISTANCE_RESET
-            if ((distDiff > 0.1))
+            if ((distDiff > 0.1) && (angleDiff < 15))
             {
                 data[i].status = DISTANCE_RESET;
             }
@@ -142,19 +142,19 @@ int Filter(vector<obstacleDataSample> &data)
                 tempData[i].distance = tempData[i].distance;
             }
         }
+    }
 
-        // Reassigns the filtered data to the original dataset
-        for (size_t i = 0; i < data.size(); ++i)
+    // Reassigns the filtered data to the original dataset
+    for (size_t i = 0; i < data.size(); ++i)
+    {
+        // Checks to see if the timestamp and status are the same, then assigns the distance and status to the original dataset
+        for (size_t j = 0; j < tempData.size(); ++j)
         {
-            // Checks to see if the timestamp and status are the same, then assigns the distance and status to the original dataset
-            for (size_t j = 0; j < tempData.size(); ++j)
+            if ((data[i].timestamp == tempData[j].timestamp) && (data[i].status == 0))
             {
-                if ((data[i].timestamp == tempData[j].timestamp) && (data[i].status == 0))
-                {
-                    data[i].distance = tempData[j].distance;
-                    data[i].status = tempData[j].status;
-                    break;
-                }
+                data[i].distance = tempData[j].distance;
+                data[i].status = tempData[j].status;
+                break;
             }
         }
     }
@@ -185,6 +185,6 @@ string printSample(obstacleDataSample sample)
         break;
     }
     // Combines all the information in a data point into one line, outputting with commas
-    fullLine = to_string(sample.timestamp) + ", " + to_string(sample.distance) + ", " + to_string(sample.angle) + ", " + status;
+    fullLine = to_string(sample.timestamp) + "," + to_string(sample.distance) + "," + to_string(sample.angle) + "," + status;
     return fullLine;
 }
