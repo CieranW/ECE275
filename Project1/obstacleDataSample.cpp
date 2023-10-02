@@ -65,18 +65,25 @@ void Classify(vector<obstacleDataSample> &data)
 
             // Assigns angleDiff (in degrees) the difference between the current and previous data point, also converts radians into degrees.
             double angleDiff = fabs((data[i].angle - data[i - 1].angle) * (180.0 / M_PI));
+            // Assigns distDiff the difference between current and previous data points
+            double distDiff = fabs(data[i].distance - data[i - 1].distance);
+
             // Checks to see if the angle difference is within tolerance of 15 degrees, status assigned ANGLE_RESET
             if ((angleDiff > 15))
             {
                 data[i].status = ANGLE_RESET;
             }
 
-            // Assigns distDiff the difference between current and previous data points
-            double distDiff = fabs(data[i].distance - data[i - 1].distance);
             // Checks to see if the distance difference is within tolerance of 0.1 meters, status assigned DISTANCE_RESET
-            if ((distDiff > 0.1) && (angleDiff < 15))
+            else if ((distDiff > 0.1) && (angleDiff < 15))
             {
                 data[i].status = DISTANCE_RESET;
+            }
+
+            // If either the distance or angle difference are greater than the tolerance, and the angle or distance are not the max distance or default angle, status is assigned ANGLE_RESET
+            else if ((distDiff > 0.1 || angleDiff > 15) && (data[i].angle != ANGLE_DEFAULT || data[i].distance != MAX_DIST))
+            {
+                data[i].status = ANGLE_RESET;
             }
 
             // If both the distance and angle differences are within the tolerance limit (0.1 meters and 15 degrees respectively), status is assigned VALID
@@ -84,79 +91,70 @@ void Classify(vector<obstacleDataSample> &data)
             {
                 data[i].status = VALID;
             }
-
-            // If either the distance or angle difference are greater than the tolerance, and the angle or distance are not the max distance or default angle, status is assigned ANGLE_RESET
-            if ((distDiff > 0.1 || angleDiff > 15) && (data[i].angle != ANGLE_DEFAULT || data[i].distance != MAX_DIST))
-            {
-                data[i].status = ANGLE_RESET;
-            }
         }
     }
 }
 
 int Filter(vector<obstacleDataSample> &data)
 {
-    vector<obstacleDataSample> tempData;
     int filterStart, filterEnd;
+    int size = data.size();
+    vector<obstacleDataSample> filteredData;
+    obstacleDataSample tempDataSample;
 
-    for (size_t i = 0; i < data.size(); i++)
+    filterStart = FILTER_WIDTH / 2;
+    filterEnd = size - filterStart;
+
+    // Creates a copy of the data vector to be used for the filtered data
+    for (int i = 0; i < size; i++)
     {
-        // Checks to see if the data has been classified as valid and pushes it to tempData for filtering
-        if (data[i].status == 0)
-        {
-            tempData.push_back(data[i]);
-        }
+        filteredData.push_back(data[i]);
     }
 
-    // If the dataset is smaller than the filter width, stop and return the original dataset, unfiltered
-    if (tempData.size() < FILTER_WIDTH)
+    // If the dataset window from that datapoint is smaller than the filter width, stop and return the original datapoint, unfiltered
+    for (int i = 0; i < size; i++)
     {
-        return 1;
-    }
+        bool filterIsValid = true;
 
-    else
-    {
-        filterStart = FILTER_WIDTH / 2;
-        filterEnd = tempData.size() - filterStart;
-
-        int size = tempData.size();
-        double sum = 0.0;
-        for (int i = 0; i < size; ++i)
+        if (data[i].status == VALID)
         {
             // Filters the data by the elements within the desired range so that there are no errors/unaccessible data points
-            if (i >= filterStart && i < filterEnd)
+            for (int j = (i - filterStart); j <= (i + filterStart); j++)
             {
-                sum = 0.0;
+                if (data[j].status != 0)
+                {
+                    // If the data point is not VALID, the filter is not valid
+                    filterIsValid = false;
+                }
+            }
+
+            // If the filter is valid, perform the filter calculations
+            if ((filterIsValid == true) && (i < filterEnd))
+            {
+                double sum = 0.0;
+
                 // At a certain element position, accesses all the data points within the filter width to add towards the sum for avg calc
                 for (int j = (i - filterStart); j <= (i + filterStart); j++)
                 {
-                    sum += tempData[j].distance;
+                    sum += data[j].distance;
                 }
-                // Assigns the filtered data to the tempData vector and updates the status to FILTERED
-                tempData[i].distance = sum / FILTER_WIDTH;
-                tempData[i].status = FILTERED;
+                // Assigns the filtered data to the filteredData vector and updates the status to FILTERED
+                filteredData[i].distance = sum / FILTER_WIDTH;
+                filteredData[i].status = FILTERED;
+                // Assigning the filtered data to a second vector will allow the data in the original vector to remain unchanged until the end of the function, resulting in the calculations being performed on the original data thus not affecting it in any way, shape, or form till the very end of the function
             }
             // If the data point is not within the filter range, the distance is kept the same and the status is kept VALID
             else
             {
-                tempData[i].distance = tempData[i].distance;
+                data[i].distance = data[i].distance;
             }
         }
     }
 
-    // Reassigns the filtered data to the original dataset
-    for (size_t i = 0; i < data.size(); ++i)
+    // Reassigns the filtered data to the original data vector
+    for (int i = 0; i < size; i++)
     {
-        // Checks to see if the timestamp and status are the same, then assigns the distance and status to the original dataset
-        for (size_t j = 0; j < tempData.size(); ++j)
-        {
-            if ((data[i].timestamp == tempData[j].timestamp) && (data[i].status == 0))
-            {
-                data[i].distance = tempData[j].distance;
-                data[i].status = tempData[j].status;
-                break;
-            }
-        }
+        data[i] = filteredData[i];
     }
 
     return 0;
@@ -178,10 +176,10 @@ string printSample(obstacleDataSample sample)
         status = "FILTERED";
         break;
     case 2:
-        status = "ANGLE_RESET";
+        status = "ANGLE RESET";
         break;
     case 3:
-        status = "DISTANCE_RESET";
+        status = "DISTANCE RESET";
         break;
     }
     // Combines all the information in a data point into one line, outputting with commas
