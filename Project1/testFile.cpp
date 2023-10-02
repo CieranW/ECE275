@@ -9,7 +9,9 @@
 int main()
 {
     string inputFile1 = "outputFile6.txt";
-    string inputFile2 = "outputFile7.txt";
+    string inputFile2 = "outputFile6.txt";
+
+    bool test = false;
 
     vector<obstacleDataSample> data1;
     vector<obstacleDataSample> data2;
@@ -24,8 +26,14 @@ int main()
             cout << "Error at index " << i << endl;
             cout << "data1: " << printSample(data1[i]) << endl;
             cout << "data2: " << printSample(data2[i]) << endl;
+            cout << endl;
+            test = true;
         }
-        cout << endl;
+    }
+
+    if (test == false)
+    {
+        cout << "No errors found" << endl;
     }
 
     return 0;
