@@ -38,3 +38,6 @@ int main()
 
     return 0;
 }
+
+// File call to run for testing
+//  g++ -c testFile.cpp -o testFile.o && g++ -c obstacleDataSample.cpp -o obstacleDataSample.o && g++ testFile.o obstacleDataSample.o -o testFiles && ./testFiles

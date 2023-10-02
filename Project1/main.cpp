@@ -26,8 +26,8 @@ using namespace std;
 
 int main(void)
 {
-    string inputFileName = "inputFile8.txt";   // Do NOT change the name "inputFileName" since used above
-    string outputFileName = "outputFile8.txt"; // Do NOT change the name "outputFileName" since used above
+    string inputFileName = "inputFile6.txt";   // Do NOT change the name "inputFileName" since used above
+    string outputFileName = "outputFile6.txt"; // Do NOT change the name "outputFileName" since used above
 
     // Add your code //
     // Variables
@@ -83,3 +83,6 @@ int main(void)
     }
     return 0;
 }
+
+// File call to run
+// g++ -c main.cpp -o main.o && g++ -c obstacleDataSample.cpp -o obstacleDataSample.o && g++ main.o obstacleDataSample.o -o my_project && ./my_project
