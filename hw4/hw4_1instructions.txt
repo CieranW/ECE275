@@ -1,0 +1,13 @@
+Given the IntNode class, define the IndexOf() function to return the index of parameter target or -1 if not found.
+
+Note: The first index after the head node is 0.
+
+Ex: If the list contains:
+
+head -> 14 -> 191 -> 22 -> 99
+IndexOf(headNode, 22) returns 2.
+
+Ex: If the list contains:
+
+head ->
+IndexOf(headNode, 22) returns -1.
