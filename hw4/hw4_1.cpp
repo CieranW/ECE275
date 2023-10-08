@@ -55,9 +55,22 @@ void IntNode::InsertAfter(IntNode *newNode)
 }
 
 // Return index of target item
+// Given the IntNode class, define the IndexOf() function to return the index of parameter target or -1 if not found.
 int IndexOf(IntNode *headNode, int target)
 {
     /* Type your code here. */
+    int index = -1;
+    IntNode *currNode = headNode;
+    while (currNode != nullptr)
+    {
+        if (currNode->GetNodeData() == target)
+        {
+            return index;
+        }
+        currNode = currNode->GetNext();
+        index++;
+    }
+    return -1;
 }
 
 int main()
