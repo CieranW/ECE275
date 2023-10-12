@@ -32,3 +32,5 @@ int main()
     cout << "   Location: " << myOfferedCourse.GetLocation() << endl;
     cout << "   Class Time: " << myOfferedCourse.GetClassTime() << endl;
 }
+// To run:
+// g++ -c main.cpp -o main.o && g++ -c Course.cpp -o Course.o && g++ -c OfferedCourse.cpp -o OfferedCourse.o && g++ main.o Course.o OfferedCourse.o -o my_program && ./my_program
