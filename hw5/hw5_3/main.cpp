@@ -41,3 +41,5 @@ int main()
 
     return 0;
 }
+// To run this program, type:
+// g++ -c main.cpp -o main.o && g++ -c Book.cpp -o Book.o && g++ -c Encyclopedia.cpp -o Encyclopedia.o && g++ main.o Book.o Encyclopedia.o -o my_program && ./my_program
