@@ -1,0 +1,1 @@
+g++ -c main.cpp -o main.o && g++ -c additionalFiles.cpp -o additionalFiles.o && g++ main.o additionalFiles.o -o my_program && ./my_program
