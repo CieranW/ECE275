@@ -34,7 +34,7 @@ Additional descriptions for the required classes are below:
 
 This class should abstract a one dimensional math vector of double values, with the number of elements of the vector set on construction. It should provide a constructor that permits creating the vector from a string of comma separated numerical values. It should also provide a function to print those values (again, with comma separation) with fixed precision 3.
 
-When reading in values into the vector, the return value should be true only if all values are successfully read in. See explanations how to implement each function in MathVector.cpp. `
+When reading in values into the vector, the return value should be true only if all values are successfully read in. See explanations how to implement each function in **MathVector.cpp**. 
 
 ### Input
 
@@ -46,7 +46,7 @@ This class should inherit with public access to the **MathVector** class. It sho
 
 ### Vehicle
 
-This class simulates the behavior of a car-like robot. The Vehicle should maintain its own State, and when the update(.) function is called it returns a pointer to its state. It is the responsibility of the calling function to make a copy, if one is needed, of the State return value. When deleted, the Vehicle should ensure that any allocated memory is destroyed. See explanations how to implement each function in Vehicle.cpp.
+This class simulates the behavior of a car-like robot. The Vehicle should maintain its own State, and when the update(.) function is called it returns a pointer to its state. It is the responsibility of the calling function to make a copy, if one is needed, of the State return value. When deleted, the Vehicle should ensure that any allocated memory is destroyed. See explanations how to implement each function in **Vehicle.cpp**.
 
 The equations of motion for the car-like robot are below:
 
