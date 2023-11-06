@@ -14,21 +14,22 @@ using namespace std;
 
 ///////////////// Before submitting your code
 // 1) uncomment this part since zyBooks use it.
-/*int main(int argc, const char* argv[]) {
-    if (argc != 3)
-    {
-        std::cout << "./project2 inputFile outputFile" << std::endl;
-        return EXIT_FAILURE;
-    }
-    string inputFileName = argv[1];
-    string outputFileName = argv[2];*/
+// int main(int argc, const char *argv[])
+// {
+//     if (argc != 3)
+//     {
+//         std::cout << "./project2 inputFile outputFile" << std::endl;
+//         return EXIT_FAILURE;
+//     }
+//     string inputFileName = argv[1];
+//     string outputFileName = argv[2];
 ///////////////////// uncomment above befofre submitting on zyBooks /////////////////
 // 2) Comment the next 3 lines below
 
 int main(void)
 {
-    string inputFileName = "inputFile5.txt";   // Do NOT change the name "inputFileName" since used above
-    string outputFileName = "outputFile5.txt"; // Do NOT change the name "outputFileName" since used above
+    string inputFileName = "inputFile7.txt";   // Do NOT change the name "inputFileName" since used above
+    string outputFileName = "outputFile7.txt"; // Do NOT change the name "outputFileName" since used above
 
     // Add your code //
     ifstream inputFile(inputFileName);
@@ -52,6 +53,8 @@ int main(void)
     string line, initialPosition, variableName;
     double wheelbase, Dt, x, y, delta, theta, v, deltaDot;
     char comma;
+    vector<double> velocity;
+    vector<double> deltaDotVec;
 
     // Set fixed precision
     cout << fixed << setprecision(3);
@@ -77,6 +80,8 @@ int main(void)
         else if (i == 3)
         {
             lineStream >> v >> comma >> deltaDot;
+            velocity.push_back(v);
+            deltaDotVec.push_back(deltaDot);
         }
     }
 
@@ -95,6 +100,10 @@ int main(void)
     while (getline(inputFile, line))
     {
         lineCount++;
+        istringstream lineStream(line); // Create a stringstream to process the line
+        lineStream >> v >> comma >> deltaDot;
+        velocity.push_back(v);
+        deltaDotVec.push_back(deltaDot);
     }
 
     // Reset the file pointer back to after the first three lines
@@ -129,14 +138,14 @@ int main(void)
         Input input;
         State *statePtr = vehicle.getState();
 
-        // Call the readElements() function on the Input instance
-        if (input.readElements(line))
+        if (count == -1)
         {
-            if (count == -1)
-            {
-                outputFile << Dt - Dt << "," << x << "," << y << "," << delta << "," << theta << "," << input.getV() << "," << input.getDeltaDot() << endl;
-            }
-            else
+            outputFile << Dt - Dt << "," << x << "," << y << "," << delta << "," << theta << "," << velocity[0] << "," << deltaDotVec[0] << endl;
+        }
+        else
+        {
+            // Call the readElements() function on the Input instance
+            if (input.readElements(line))
             {
                 // Call the update() function on the Vehicle instance
                 statePtr = vehicle.update(&input, DtFixed);
@@ -152,7 +161,6 @@ int main(void)
 
                 if (count == lineCount - 1)
                 {
-                    cout << v << " " << deltaDot << endl;
 
                     double X1 = lastX + Dt * v * cos(lastDelta) * cos(lastTheta);
                     double X2 = lastY + Dt * v * cos(lastDelta) * sin(lastTheta);
@@ -169,8 +177,8 @@ int main(void)
                 // Update the time step
                 DtTemp += Dt;
             }
-            count++;
         }
+        count++;
     }
 
     // Close the input/output file
