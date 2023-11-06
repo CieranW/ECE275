@@ -119,17 +119,25 @@ int main(void)
             }
             else
             {
-                // Call the update() function on the Vehicle instance
-                statePtr = vehicle.update(&input, DtFixed);
-
-                // Call the toString() function on the State instance
-                string stateStr = statePtr->toString();
                 if (count == lineCount - 1)
                 {
+                    v = input.getV();
+                    deltaDot = input.getDeltaDot();
+                    Input lastInput(v, deltaDot);
+                    // Call the update() function on the Vehicle instance
+                    statePtr = vehicle.update(&lastInput, DtFixed);
+
+                    // Call the toString() function on the State instance
+                    string stateStr = statePtr->toString();
                     outputFile << DtTemp << "," << stateStr << endl;
                 }
                 else
                 {
+                    // Call the update() function on the Vehicle instance
+                    statePtr = vehicle.update(&input, DtFixed);
+
+                    // Call the toString() function on the State instance
+                    string stateStr = statePtr->toString();
                     // Write the state string to the output file
                     outputFile << DtTemp << "," << stateStr << "," << input.getV() << "," << input.getDeltaDot() << endl;
                 }
