@@ -72,33 +72,31 @@ int main(void)
     // Updates Vehicle with the new state and wheelbase
     Vehicle vehicle(state, wheelbase);
 
-    cout << "Wheelbase: " << wheelbase << endl;
-    cout << "Initial Position: " << x << ", " << y << ", " << delta << ", " << theta << endl;
-    cout << "Dt: " << Dt << endl;
+    // cout << "Wheelbase: " << wheelbase << endl;
+    // cout << "Initial Position: " << x << ", " << y << ", " << delta << ", " << theta << endl;
+    // cout << "Dt: " << Dt << endl;
 
-    // Establish the initial position
-    cout << "Initial Position: " << x << ", " << y << ", " << delta << ", " << theta << endl;
+    vector<State> states;      // Create a vector to store the State objects
+    vector<double> velocities; // Create a vector to store v values
+    vector<double> deltaDots;  // Create a vector to store deltaDot values
 
     while (getline(inputFile, line))
     {
         Input input;
 
-        // Call the readElements() function on the MathVector instance
+        // Call the readElements() function on the Input instance
         if (input.readElements(line))
         {
             // Line was successfully processed
-            cout << "Values successfully read: " << input.toString() << endl;
-            // const vector<double> &elements = vector.getElements();
-            // if (elements.size() >= 2)
-            // {
-            //     double v = elements[0];        // Access the first element as v
-            //     double deltaDot = elements[1]; // Access the second element as deltaDot
-            // }
+            // cout << "Values successfully read: " << input.toString() << endl;
 
             // Call the update() function on the Vehicle instance
             State *newState = vehicle.update(&input, Dt);
-            cout << "State updated: " << Dt << "," << newState->toString() << "," << input.getV() << "," << input.getDeltaDot() << endl;
+            states.push_back(*newState);              // Store the State in the vector
+            velocities.push_back(input.getV());       // Store v in the velocities vector
+            deltaDots.push_back(input.getDeltaDot()); // Store deltaDot in the deltaDots vector
 
+            // Update Dt
             Dt += DtTemp;
         }
         else
@@ -108,7 +106,64 @@ int main(void)
         }
     }
 
+    int size = states.size();
+    // // Reset Dt to the original value
+    // Dt = DtTemp;
+
+    // // Establish the initial position
+    // cout << "Initial Position: " << Dt - Dt << "," << x << "," << y << "," << delta << "," << theta << "," << velocities[0] << "," << deltaDots[0] << endl;
+
+    // for (int i = 0; i < size; i++)
+    // {
+    //     if (i == (size - 1))
+    //     {
+    //         cout << "Final Position: " << Dt << "," << states.at(i).toString() << endl;
+    //     }
+    //     else
+    //     {
+    //         cout << "Position: " << Dt << "," << states.at(i).toString() << "," << velocities.at(i) << "," << deltaDots.at(i) << endl;
+    //     }
+
+    //     // Update Dt
+    //     Dt += DtTemp;
+    // }
     inputFile.close();
+
+    // Open the output file for writing
+    ofstream outputFile(outputFileName);
+
+    if (!outputFile.is_open())
+    {
+        cerr << "Error: Unable to open the output file." << endl;
+        return 1;
+    }
+
+    // Write the results to the output file
+    // Reset Dt to the original value
+    Dt = DtTemp;
+
+    // Fix precision
+    outputFile << fixed << setprecision(3);
+
+    // Establish the initial position
+    outputFile << Dt - Dt << "," << x << "," << y << "," << delta << "," << theta << "," << velocities[0] << "," << deltaDots[0] << endl;
+    for (int i = 0; i < size; i++)
+    {
+        if (i == (size - 1))
+        {
+            outputFile << Dt << "," << states.at(i).toString() << endl;
+        }
+        else
+        {
+            outputFile << Dt << "," << states.at(i).toString() << "," << velocities.at(i) << "," << deltaDots.at(i) << endl;
+        }
+
+        // Update Dt
+        Dt += DtTemp;
+    }
+
+    // Close the output file
+    outputFile.close();
 
     return 0;
 }
