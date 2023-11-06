@@ -54,18 +54,14 @@ double Vehicle::getWheelbase()
 // The variable u1 is the input velocity (v), and u2 is the tire angle rate of change (deltaDot).
 // The variable Dt is the time step, which is 0.1 seconds by default.
 // The function should return a pointer to the new state.
+// returns a pointer to the current state. The calling object should make
+// a deep copy of the data if it wants to keep it
+// State* getState();
+// return a pointer to the current state
+// state has x, y, delta and theta
 State *Vehicle::update(Input *u, double ts)
 {
-    // x1(t + Dt) = x1(t) + Dt u1(t) cos(x3(t)) cos(x4(t))
-    // x2(t + Dt) = x2(t) + Dt u1(t) cos(x3(t)) sin(x4(t))
-    // x3(t + Dt) = x3(t) + Dt u2(t)
-    // x4(t + Dt) = x4(t) + Dt u1(t) (1 / L) sin(x3(t))
-    // where x1 is x position, x2 is y position,
-    // x3 is tire angle delta(in radians) and x4 is heading theta(in radians).
-    // L is the Vehicle's wheelbase.
-    // The variable u1 is the input velocity (v), and u2 is the tire angle rate of change (deltaDot).
-    // The variable Dt is the time step, which is 0.1 seconds by default.
-    // The function should return a pointer to the new state.
+    // Get variables from state and input
     double x1 = this->state->getX();
     double x2 = this->state->getY();
     double x3 = this->state->getDelta();
@@ -74,20 +70,14 @@ State *Vehicle::update(Input *u, double ts)
     double u2 = u->getDeltaDot();
     double L = this->wheelbase;
     double Dt = ts;
+
+    // Calculations for new state
     double newX1 = x1 + Dt * u1 * cos(x3) * cos(x4);
     double newX2 = x2 + Dt * u1 * cos(x3) * sin(x4);
     double newX3 = x3 + Dt * u2;
     double newX4 = x4 + Dt * u1 * (1 / L) * sin(x3);
-    State *newState = new State(newX1, newX2, newX3, newX4);
-    return newState;
-}
 
-// returns a pointer to the current state. The calling object should make
-// a deep copy of the data if it wants to keep it
-// State* getState();
-// return a pointer to the current state
-// state has x, y, delta and theta
-State *Vehicle::getState()
-{
-    return this->state;
+    State *newState = new State(newX1, newX2, newX3, newX4);
+
+    return newState;
 }

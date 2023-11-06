@@ -10,17 +10,17 @@
 #include <vector>
 using namespace std;
 
-class MathVector {
+class MathVector
+{
 public:
-    //default contructor
+    // default contructor
     MathVector();
-    MathVector( int numElements );
-    ~MathVector( ) { }
-    bool readElements(string str );
-    
-    std::string toString( );
+    MathVector(int numElements);
+    ~MathVector();
+    bool readElements(string str);
+    string toString();
 
-protected: //to be used with inhetied classes
+protected: // to be used with inherited classes
     int numElements;
     vector<double> elements;
 };

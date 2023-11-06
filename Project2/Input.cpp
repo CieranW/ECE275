@@ -11,7 +11,6 @@
 Input::Input()
     : MathVector(2)
 {
-
 }
 
 Input::Input(double v, double deltaDot)
@@ -21,10 +20,9 @@ Input::Input(double v, double deltaDot)
     this->elements.at(1) = deltaDot;
 }
 
-Input::Input(const Input& other)
+Input::Input(const Input &other)
     : MathVector(other)
 {
-
 }
 
 double Input::getDeltaDot() { return elements.at(1); }
