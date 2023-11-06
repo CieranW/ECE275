@@ -43,6 +43,9 @@ int main(void)
     string line, initialPosition, variableName;
     double wheelbase, Dt, x, y, delta, theta, v, deltaDot;
 
+    // Set fixed precision
+    cout << fixed << setprecision(3);
+
     // Add these lines to skip the lines with variable names
     for (int i = 0; i < 3; i++)
     {
@@ -62,6 +65,8 @@ int main(void)
             lineStream >> variableName >> Dt;
         }
     }
+
+    double DtTemp = Dt;
     // Assign State with the initial position
     State state(x, y, delta, theta);
     // Updates Vehicle with the new state and wheelbase
@@ -71,15 +76,30 @@ int main(void)
     cout << "Initial Position: " << x << ", " << y << ", " << delta << ", " << theta << endl;
     cout << "Dt: " << Dt << endl;
 
+    // Establish the initial position
+    cout << "Initial Position: " << x << ", " << y << ", " << delta << ", " << theta << endl;
+
     while (getline(inputFile, line))
     {
-        MathVector vector; // Create a MathVector instance
+        Input input;
 
         // Call the readElements() function on the MathVector instance
-        if (vector.readElements(line))
+        if (input.readElements(line))
         {
             // Line was successfully processed
-            cout << "Values successfully read: " << vector.toString() << endl;
+            cout << "Values successfully read: " << input.toString() << endl;
+            // const vector<double> &elements = vector.getElements();
+            // if (elements.size() >= 2)
+            // {
+            //     double v = elements[0];        // Access the first element as v
+            //     double deltaDot = elements[1]; // Access the second element as deltaDot
+            // }
+
+            // Call the update() function on the Vehicle instance
+            State *newState = vehicle.update(&input, Dt);
+            cout << "State updated: " << Dt << "," << newState->toString() << "," << input.getV() << "," << input.getDeltaDot() << endl;
+
+            Dt += DtTemp;
         }
         else
         {

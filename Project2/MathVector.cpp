@@ -1,4 +1,5 @@
 #include "MathVector.h"
+#include "Input.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -31,32 +32,54 @@ MathVector::~MathVector()
 // extract each value to populate the elements vector
 // return true if a string is valid, false if invalid.
 // bool readElements(string str);
+// bool MathVector::readElements(string str)
+// {
+//     // Split the input string using a comma as a delimiter
+//     vector<string> tokens;
+//     stringstream tokenStream(str);
+//     string token;
+//     while (getline(tokenStream, token, ','))
+//     {
+//         tokens.push_back(token);
+//     }
+
+//     for (const string &token : tokens)
+//     {
+//         try
+//         {
+//             // Attempt to convert each token to a double
+//             double value = stod(token);
+
+//             // Add the double value to the elements vector
+//             elements.push_back(value);
+//         }
+//         catch (const invalid_argument &e)
+//         {
+//             cerr << "Invalid argument: " << e.what() << endl;
+//             return false; // Return false for invalid input
+//         }
+//     }
+
+//     return true;
+// }
+
 bool MathVector::readElements(string str)
 {
-    // Split the input string using a comma as a delimiter
-    vector<string> tokens;
-    stringstream tokenStream(str);
-    string token;
-    while (getline(tokenStream, token, ','))
+    double v, deltaDot;
+    char comma;
+
+    istringstream iss(str);
+
+    try
     {
-        tokens.push_back(token);
+        iss >> v >> comma >> deltaDot;
+        elements.at(0) = v;
+        elements.at(1) = deltaDot;
     }
-
-    for (const string &token : tokens)
+    catch (const invalid_argument &e)
     {
-        try
-        {
-            // Attempt to convert each token to a double
-            double value = stod(token);
-
-            // Add the double value to the elements vector
-            elements.push_back(value);
-        }
-        catch (const invalid_argument &e)
-        {
-            cerr << "Invalid argument: " << e.what() << endl;
-            return false; // Return false for invalid input
-        }
+        cerr << "Invalid argument: " << e.what() << endl;
+        return false; // Return false for invalid input
     }
 
     return true;

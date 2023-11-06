@@ -25,6 +25,8 @@ Input::Input(const Input &other)
 {
 }
 
+Input::~Input() {}
+
 double Input::getDeltaDot() { return elements.at(1); }
 
 double Input::getV() { return elements.at(0); }
