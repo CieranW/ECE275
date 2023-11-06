@@ -56,22 +56,27 @@ double Vehicle::getWheelbase()
 State *Vehicle::update(Input *u, double ts)
 {
     // Get variables from state and input
-    double x1 = this->state->getX();
-    double x2 = this->state->getY();
-    double x3 = this->state->getDelta();
-    double x4 = this->state->getTheta();
+    double x1 = state->getX();
+    double x2 = state->getY();
+    double x3 = state->getDelta();
+    double x4 = state->getTheta();
     double u1 = u->getV();
     double u2 = u->getDeltaDot();
-    double L = this->wheelbase;
+    double L = wheelbase;
     double Dt = ts;
 
-    // Calculations for new state
+    // Calculations for the new state
     double newX1 = x1 + Dt * u1 * cos(x3) * cos(x4);
     double newX2 = x2 + Dt * u1 * cos(x3) * sin(x4);
     double newX3 = x3 + Dt * u2;
-    double newX4 = x4 + Dt * u1 * (1 / L) * sin(x3);
+    double newX4 = x4 + Dt * u1 * (1.0 / L) * sin(x3);
 
-    State *newState = new State(newX1, newX2, newX3, newX4);
+    // Update the current state
+    state->setX(newX1);
+    state->setY(newX2);
+    state->setDelta(newX3);
+    state->setTheta(newX4);
 
-    return newState;
+    // Return the updated state
+    return state;
 }

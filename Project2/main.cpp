@@ -76,7 +76,24 @@ int main(void)
         }
     }
 
-    double DtTemp = 0;
+    // Count the number of remaining lines in the input file
+    int lineCount = 0;
+    while (getline(inputFile, line))
+    {
+        lineCount++;
+    }
+
+    // Reset the file pointer back to after the first three lines
+    inputFile.clear();            // Clear error flags
+    inputFile.seekg(0, ios::beg); // Move the file pointer to the beginning
+
+    // Skip the lines with variable names again
+    for (int i = 0; i < 3; i++)
+    {
+        getline(inputFile, line);
+    }
+
+    double DtTemp = Dt;
     double DtFixed = Dt;
     // Assign State with the initial position
     State state(x, y, delta, theta);
@@ -85,30 +102,41 @@ int main(void)
 
     outputFile << fixed << setprecision(3); // Set the desired format
 
-    while (getline(inputFile, line))
+    int count = -1;
+
+    while (count < lineCount)
     {
+        getline(inputFile, line);
         Input input;
         State *statePtr = vehicle.getState();
 
         // Call the readElements() function on the Input instance
         if (input.readElements(line))
         {
-            // Call the update() function on the Vehicle instance
-            statePtr = vehicle.update(&input, DtFixed);
+            if (count == -1)
+            {
+                outputFile << Dt - Dt << "," << x << "," << y << "," << delta << "," << theta << "," << input.getV() << "," << input.getDeltaDot() << endl;
+            }
+            else
+            {
+                // Call the update() function on the Vehicle instance
+                statePtr = vehicle.update(&input, DtFixed);
 
-            // Call the toString() function on the State instance
-            string stateStr = statePtr->toString();
-
-            // Write the state string to the output file
-            outputFile << DtTemp << "," << stateStr << "," << input.getV() << "," << input.getDeltaDot() << endl;
-
-            // Update the time step
-            DtTemp += Dt;
-        }
-        else
-        {
-            // Line was not successfully processed
-            cerr << "Error: Unable to read values." << endl;
+                // Call the toString() function on the State instance
+                string stateStr = statePtr->toString();
+                if (count == lineCount - 1)
+                {
+                    outputFile << DtTemp << "," << stateStr << endl;
+                }
+                else
+                {
+                    // Write the state string to the output file
+                    outputFile << DtTemp << "," << stateStr << "," << input.getV() << "," << input.getDeltaDot() << endl;
+                }
+                // Update the time step
+                DtTemp += Dt;
+            }
+            count++;
         }
     }
 
