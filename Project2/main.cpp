@@ -59,6 +59,7 @@ int main(void)
     // Set fixed precision
     cout << fixed << setprecision(3);
 
+    int lineCount = 0;
     // Add these lines to skip the lines with variable names
     for (int i = 0; i < 4; i++)
     {
@@ -82,21 +83,11 @@ int main(void)
             lineStream >> v >> comma >> deltaDot;
             velocity.push_back(v);
             deltaDotVec.push_back(deltaDot);
+            lineCount++;
         }
     }
 
-    // Reset the file pointer back to after the first three lines
-    inputFile.clear();            // Clear error flags
-    inputFile.seekg(0, ios::beg); // Move the file pointer to the beginning
-
-    // Skip the lines with variable names again
-    for (int i = 0; i < 3; i++)
-    {
-        getline(inputFile, line);
-    }
-
     // Count the number of remaining lines in the input file
-    int lineCount = 0;
     while (getline(inputFile, line))
     {
         lineCount++;
