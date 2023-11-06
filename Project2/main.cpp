@@ -27,8 +27,8 @@ using namespace std;
 
 int main(void)
 {
-    string inputFileName = "inputFile8.txt";   // Do NOT change the name "inputFileName" since used above
-    string outputFileName = "outputFile8.txt"; // Do NOT change the name "outputFileName" since used above
+    string inputFileName = "inputFile5.txt";   // Do NOT change the name "inputFileName" since used above
+    string outputFileName = "outputFile5.txt"; // Do NOT change the name "outputFileName" since used above
 
     // Add your code //
     ifstream inputFile(inputFileName);
@@ -39,9 +39,19 @@ int main(void)
         return 1;
     }
 
+    // Open the output file for writing
+    ofstream outputFile(outputFileName);
+
+    if (!outputFile.is_open())
+    {
+        cerr << "Error: Unable to open the output file." << endl;
+        return 1;
+    }
+
     // Declare variables
     string line, initialPosition, variableName;
     double wheelbase, Dt, x, y, delta, theta, v, deltaDot;
+    char comma;
 
     // Set fixed precision
     cout << fixed << setprecision(3);
@@ -58,7 +68,7 @@ int main(void)
         }
         else if (i == 1)
         {
-            lineStream >> variableName >> x >> y >> delta >> theta;
+            lineStream >> variableName >> x >> comma >> y >> comma >> delta >> comma >> theta;
         }
         else if (i == 2)
         {
@@ -66,38 +76,34 @@ int main(void)
         }
     }
 
-    double DtTemp = Dt;
+    double DtTemp = 0;
+    double DtFixed = Dt;
     // Assign State with the initial position
     State state(x, y, delta, theta);
     // Updates Vehicle with the new state and wheelbase
     Vehicle vehicle(state, wheelbase);
 
-    // cout << "Wheelbase: " << wheelbase << endl;
-    // cout << "Initial Position: " << x << ", " << y << ", " << delta << ", " << theta << endl;
-    // cout << "Dt: " << Dt << endl;
-
-    vector<State> states;      // Create a vector to store the State objects
-    vector<double> velocities; // Create a vector to store v values
-    vector<double> deltaDots;  // Create a vector to store deltaDot values
+    outputFile << fixed << setprecision(3); // Set the desired format
 
     while (getline(inputFile, line))
     {
         Input input;
+        State *statePtr = vehicle.getState();
 
         // Call the readElements() function on the Input instance
         if (input.readElements(line))
         {
-            // Line was successfully processed
-            // cout << "Values successfully read: " << input.toString() << endl;
-
             // Call the update() function on the Vehicle instance
-            State *newState = vehicle.update(&input, Dt);
-            states.push_back(*newState);              // Store the State in the vector
-            velocities.push_back(input.getV());       // Store v in the velocities vector
-            deltaDots.push_back(input.getDeltaDot()); // Store deltaDot in the deltaDots vector
+            statePtr = vehicle.update(&input, DtFixed);
 
-            // Update Dt
-            Dt += DtTemp;
+            // Call the toString() function on the State instance
+            string stateStr = statePtr->toString();
+
+            // Write the state string to the output file
+            outputFile << DtTemp << "," << stateStr << "," << input.getV() << "," << input.getDeltaDot() << endl;
+
+            // Update the time step
+            DtTemp += Dt;
         }
         else
         {
@@ -106,63 +112,8 @@ int main(void)
         }
     }
 
-    int size = states.size();
-    // // Reset Dt to the original value
-    // Dt = DtTemp;
-
-    // // Establish the initial position
-    // cout << "Initial Position: " << Dt - Dt << "," << x << "," << y << "," << delta << "," << theta << "," << velocities[0] << "," << deltaDots[0] << endl;
-
-    // for (int i = 0; i < size; i++)
-    // {
-    //     if (i == (size - 1))
-    //     {
-    //         cout << "Final Position: " << Dt << "," << states.at(i).toString() << endl;
-    //     }
-    //     else
-    //     {
-    //         cout << "Position: " << Dt << "," << states.at(i).toString() << "," << velocities.at(i) << "," << deltaDots.at(i) << endl;
-    //     }
-
-    //     // Update Dt
-    //     Dt += DtTemp;
-    // }
+    // Close the input/output file
     inputFile.close();
-
-    // Open the output file for writing
-    ofstream outputFile(outputFileName);
-
-    if (!outputFile.is_open())
-    {
-        cerr << "Error: Unable to open the output file." << endl;
-        return 1;
-    }
-
-    // Write the results to the output file
-    // Reset Dt to the original value
-    Dt = DtTemp;
-
-    // Fix precision
-    outputFile << fixed << setprecision(3);
-
-    // Establish the initial position
-    outputFile << Dt - Dt << "," << x << "," << y << "," << delta << "," << theta << "," << velocities[0] << "," << deltaDots[0] << endl;
-    for (int i = 0; i < size; i++)
-    {
-        if (i == (size - 1))
-        {
-            outputFile << Dt << "," << states.at(i).toString() << endl;
-        }
-        else
-        {
-            outputFile << Dt << "," << states.at(i).toString() << "," << velocities.at(i) << "," << deltaDots.at(i) << endl;
-        }
-
-        // Update Dt
-        Dt += DtTemp;
-    }
-
-    // Close the output file
     outputFile.close();
 
     return 0;

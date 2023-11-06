@@ -53,12 +53,6 @@ double Vehicle::getWheelbase()
 // L is the Vehicle's wheelbase.
 // The variable u1 is the input velocity (v), and u2 is the tire angle rate of change (deltaDot).
 // The variable Dt is the time step, which is 0.1 seconds by default.
-// The function should return a pointer to the new state.
-// returns a pointer to the current state. The calling object should make
-// a deep copy of the data if it wants to keep it
-// State* getState();
-// return a pointer to the current state
-// state has x, y, delta and theta
 State *Vehicle::update(Input *u, double ts)
 {
     // Get variables from state and input
