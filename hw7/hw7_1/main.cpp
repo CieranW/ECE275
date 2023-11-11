@@ -107,15 +107,31 @@ int main()
     for (i = 0; i < zipCodeState.size(); ++i)
     {
         // TODO: Using ZIP code, find state abbreviation
-    }
+        if (zipCodeState[i].GetKey() == zip)
+        {
+            abbrev = zipCodeState[i].GetValue();
+            break;
+        }
+        }
 
     for (i = 0; i < abbrevState.size(); ++i)
     {
         // TODO: Using state abbreviation, find state name
+        if (abbrevState[i].GetKey() == abbrev)
+        {
+            state = abbrevState[i].GetValue();
+            break;
+        }
     }
 
     for (i = 0; i < statePopulation.size(); ++i)
     {
         // TODO: Using state name, find population. Print pair info.
+        if (statePopulation[i].GetKey() == state)
+        {
+            population = statePopulation[i].GetValue();
+            statePopulation[i].PrintInfo();
+            break;
+        }
     }
 }
