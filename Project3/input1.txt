@@ -1,0 +1,9 @@
+engadget   github
+engadget   microsoft
+twitter   engadget
+john_stewart   engadget
+github   john_stewart
+github   microsoft
+twitter   microsoft
+oracle   microsoft
+microsoft   oracle

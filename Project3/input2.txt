@@ -1,0 +1,10 @@
+engadget   github
+microsoft   engadget
+twitter   engadget
+john_stewart   engadget
+github   john_stewart
+microsoft   github
+twitter   microsoft
+microsoft   oracle
+spaceX   oracle
+github   spaceX
