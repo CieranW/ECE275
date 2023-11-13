@@ -42,17 +42,32 @@ void InsertionSort(int numbers[], int size)
 {
     int i;
     int j;
+    int swaps = 0;
+    int comparisons = 0;
 
     for (i = 1; i < size; ++i)
     {
         j = i;
-        while (j > 0 && numbers[j] < numbers[j - 1])
+        while (j > 0)
         {
-            Swap(numbers, j, j - 1);
-            swaps += 1;
+            if (numbers[j] < numbers[j - 1])
+            {
+                Swap(numbers, j, j - 1);
+                swaps += 1;
+            }
+            else
+            {
+                comparisons += 1;
+                break;
+            }
+            comparisons += 1;
             --j;
         }
+        PrintNums(numbers, size);
     }
+    cout << endl
+         << "comparisons: " << comparisons << endl;
+    cout << "swaps: " << swaps;
 }
 
 int main()
@@ -71,7 +86,7 @@ int main()
     cout << endl;
 
     // Step 4: Output the number of comparisons and swaps
-    // TODO: Output the number of comparisons and swaps performed
+    // TODO: Output the number of comparisons and swaps performed by InsertionSort
 
     return 0;
 }
