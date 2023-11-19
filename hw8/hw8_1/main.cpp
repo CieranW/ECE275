@@ -28,18 +28,30 @@ template <typename TheType>
 int OrderedList<TheType>::Size()
 {
     /* Type your code here. */
+    int size = list.size();
+    return size;
 }
 
 template <typename TheType>
 TheType OrderedList<TheType>::At(int index)
 {
     /* Type your code here. */
+    return list.at(index);
 }
 
 template <typename TheType>
 int OrderedList<TheType>::Find(TheType value)
 {
     /* Type your code here. */
+    for (int i = 0; i < list.size(); i++)
+    {
+        if (list.at(i) == value)
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 template <typename TheType>
@@ -88,6 +100,19 @@ bool OrderedList<TheType>::Remove(TheType oldItem)
     int indx = Find(oldItem);
 
     /* Type your code here. */
+    if (indx == -1)
+    {
+        return false;
+    }
+    else
+    {
+        for (j = indx; j < list.size() - 1; ++j)
+        {
+            list.at(j) = list.at(j + 1);
+        }
+        list.resize(list.size() - 1);
+        return true;
+    }
 }
 
 template <typename TheType>
