@@ -5,6 +5,7 @@ The program is the same as shown at the end of the **Merge sort** section, with 
 - Numbers are entered by a user in a separate helper function, **ReadNums()**, instead of defining a specific array in **main()**. The first number is how many integers to be sorted, and the rest are the integers.
 - Output of the array has been moved to the helper function **PrintNums()**.
 - An output has been added to **MergeSort()**, showing the indices that will be passed to the recursive function calls.
+
 Add code to the merge sort algorithm to count the number of comparisons performed.
 
 Add code at the end of **main()** that outputs "comparisons: " followed by the number of comparisons performed (Ex: "comparisons: 12")

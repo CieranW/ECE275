@@ -1,6 +1,8 @@
 #include <iostream>
 using namespace std;
 
+int comparisons = 0;
+
 // Create an array of size ints.
 // Read size ints from cin, storing them in the array.
 // Return the array.
@@ -45,6 +47,7 @@ void Merge(int numbers[], int i, int j, int k)
 
     while (leftPos <= j && rightPos <= k)
     {
+        ++comparisons;
         if (numbers[leftPos] < numbers[rightPos])
         {
             mergedNumbers[mergePos] = numbers[leftPos];
@@ -111,6 +114,8 @@ int main()
     cout << endl
          << "sorted:   ";
     PrintNums(numbers, size);
+
+    cout << "comparisons: " << comparisons << endl;
 
     return 0;
 }
