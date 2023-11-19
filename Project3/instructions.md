@@ -28,12 +28,10 @@ You will be provided with the accounts with their friends and for each friend hi
 ## Input data format
 
 A sample of the input data is:
-**
-```
-github   john_stewart
-github   microsoft
-microsoft  oracle
-```
+
+    github   john_stewart
+    github   microsoft
+    microsoft  oracle
 
 The two columns are defining the relationship between two accounts. The account in the **second** column is **following** the account in the **first** column. Thus, this is a directed graph. The edge goes from the account in the second column to the account in the first column (second --> first).
 
@@ -43,10 +41,8 @@ The two columns are defining the relationship between two accounts. The account 
 
 The data is in the format of:
 
-```
-Name_1   Name_2
-Name_x   Name_y
-```
+    Name_1   Name_2
+    Name_x   Name_y
 
 For each line there will be two usernames separated by three spaces. Each username is no longer than 15 characters and contain only alphanumeric characters(letters A-Z, a-z, numbers 0-9) with the exception of underscores. For each name, change every UPPERcase to lowercase.
 
@@ -83,10 +79,8 @@ The program should output the tree of all accounts within a depth of 2 of the ro
 
 **The list should be printed in alphabetical order for each one of the accounts**. The output written should be in the following format:
 
-```
-The root account is Name, with in-degree centrality of N. There are M users in the social network.
-username1 (distance1)
-username2 (distance2)
-```
+    The root account is Name, with in-degree centrality of N. There are M users in the social network.
+    username1 (distance1)
+    username2 (distance2)
 
 where Name is the name (as entered in the file), N is the in-degree centrality and M is the number of users in the social network. The users should be sorted alphabetically by name. username1 should be the root user. distance is the depth of that username.
