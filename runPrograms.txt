@@ -1,1 +1,1 @@
-g++ -c main.cpp -o main.o && g++ -c additionalFiles.cpp -o additionalFiles.o && g++ main.o additionalFiles.o -o my_program && ./my_program
+g++ -std=c++11 -c <YOUR_MAIN_FILE>.cpp -o <YOUR_MAIN_FILE>.o && g++ -std=c++11 -c <YOUR_OTHER_FILES>.cpp -o <YOUR_OTHER_FILES>.o && g++ -std=c++11 <YOUR_MAIN_FILE>.o <YOUR_OTHER_FILES>.o -o <OUTPUT_EXECUTABLE_NAME> && ./<OUTPUT_EXECUTABLE_NAME>
