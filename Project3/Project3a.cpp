@@ -32,6 +32,15 @@ string Account::getAccountName() const
     return name;
 }
 
+string Account::getFollower() const
+{
+    string followList = "";
+    for (const auto &follower : followers)
+    {
+        followList += follower + " ";
+    }
+    return followList;
+}
 int Account::getFollowerCount() const
 {
     return followerCount;

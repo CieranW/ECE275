@@ -15,6 +15,8 @@ public:
     void addFollowing(const string &followingName);
     bool accountExists(const string &accountName) const;
     string getAccountName() const;
+    string getFollowerName() const;
+    string getFollower() const;
     int getFollowerCount() const;
 
 private:
