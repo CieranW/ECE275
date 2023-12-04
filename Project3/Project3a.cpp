@@ -1,7 +1,8 @@
 #include "Project3a.h"
 #include "Graph.h"
 #include <string>
-#include <map>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -44,7 +45,10 @@ string Account::getFollower() const
 
 vector<string> Account::getFollowerList() const
 {
-    return followers;
+    // Sort alphabetically
+    vector<string> sortedFollowers = followers;
+    sort(sortedFollowers.begin(), sortedFollowers.end());
+    return sortedFollowers;
 }
 
 int Account::getFollowerCount() const
