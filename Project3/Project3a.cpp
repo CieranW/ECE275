@@ -41,6 +41,12 @@ string Account::getFollower() const
     }
     return followList;
 }
+
+vector<string> Account::getFollowerList() const
+{
+    return followers;
+}
+
 int Account::getFollowerCount() const
 {
     return followerCount;

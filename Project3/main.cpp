@@ -42,20 +42,22 @@ int main(void)
         stringstream ss(line);
 
         string accountName, followerName;
-
         ss >> accountName >> followerName;
 
-        // Change both accountName and followerName to lowercase
-        for (unsigned int i = 0; i < accountName.length(); i++)
-        {
-            accountName[i] = tolower(accountName[i]);
-        }
-        for (unsigned int i = 0; i < followerName.length(); i++)
-        {
-            followerName[i] = tolower(followerName[i]);
-        }
+        // Change name to lowercase
+        transform(accountName.begin(), accountName.end(), accountName.begin(), ::tolower);
+        transform(followerName.begin(), followerName.end(), followerName.begin(), ::tolower);
 
-        // Check if both the accountName and followerName exist in the master vector
+        // If the vector is empty, create the first two accounts using the inputs from the file
+        if (allAccounts.empty())
+        {
+            Account newAccount(accountName);
+            allAccounts.push_back(newAccount);
+
+            Account newFollower(followerName);
+            allAccounts.push_back(newFollower);
+        }
+        // Check if both accountName and followerName exist in the master vector
         auto accountIt = find_if(allAccounts.begin(), allAccounts.end(),
                                  [&accountName](const Account &acc)
                                  { return acc.accountExists(accountName); });
@@ -64,39 +66,105 @@ int main(void)
                                   [&followerName](const Account &acc)
                                   { return acc.accountExists(followerName); });
 
-        // If both accountName and followerName exist, add following relationship
-        if (accountIt != allAccounts.end() && followerIt != allAccounts.end())
-        {
-            followerIt->addFollowing(accountName);
-            accountIt->addFollower(followerName);
-        }
-        else
-        {
-            if (accountIt == allAccounts.end())
-            {
-                cout << "Creating new account for " << accountName << endl;
-                Account newAccount(accountName);
-                newAccount.addFollower(followerName);
-                allAccounts.push_back(newAccount);
-            }
+        // Create both accounts if they don't exist
+        bool createdAccount = false;
 
-            if (followerIt == allAccounts.end())
-            {
-                cout << "Creating new account for " << followerName << endl;
-                Account newAccount(followerName);
-                newAccount.addFollowing(accountName);
-                allAccounts.push_back(newAccount);
-            }
+        if (accountIt == allAccounts.end())
+        {
+            Account newAccount(accountName);
+            allAccounts.push_back(newAccount);
+
+            // cout << "Created new account " << accountName << endl;
+            createdAccount = true;
+        }
+
+        if (followerIt == allAccounts.end())
+        {
+            Account newAccount(followerName);
+            allAccounts.push_back(newAccount);
+
+            // cout << "Created new account " << followerName << endl;
+            createdAccount = true;
+        }
+
+        // Re-find iterators after possible vector reallocation
+        if (createdAccount)
+        {
+            accountIt = find_if(allAccounts.begin(), allAccounts.end(),
+                                [&accountName](const Account &acc)
+                                { return acc.accountExists(accountName); });
+
+            followerIt = find_if(allAccounts.begin(), allAccounts.end(),
+                                 [&followerName](const Account &acc)
+                                 { return acc.accountExists(followerName); });
+        }
+
+        // Establish follower/following relationship
+        if (accountIt != allAccounts.end() || followerIt != allAccounts.end())
+        {
+            accountIt->addFollower(followerName);
+            followerIt->addFollowing(accountName);
+
+            // cout << followerName << " is now following " << accountName << endl;
         }
     }
 
+    // For testing purposes
     // Print the follower count for each account in the master vector
+    // for (const auto &acc : allAccounts)
+    // {
+    //     cout << "Account: " << acc.getAccountName() << ", Follower Count: " << acc.getFollowerCount() << endl;
+    //     cout << "Follower: " << acc.getFollower() << endl;
+    // }
+
+    // Find the maximum number of followers
+    int maxFollowers = 0;
     for (const auto &acc : allAccounts)
     {
-        cout << "Account: " << acc.getAccountName() << ", Follower Count: " << acc.getFollowerCount() << endl;
-        cout << "Follower: " << acc.getFollower() << endl;
+        maxFollowers = max(maxFollowers, acc.getFollowerCount());
     }
 
+    // Create a vector to store accounts with maximum followers
+    vector<Account> accountsWithMaxFollowers;
+
+    // Find all accounts with the maximum number of followers
+    for (const auto &acc : allAccounts)
+    {
+        if (acc.getFollowerCount() == maxFollowers)
+        {
+            accountsWithMaxFollowers.push_back(acc);
+        }
+    }
+
+    // Sort accounts with the maximum followers alphabetically
+    sort(accountsWithMaxFollowers.begin(), accountsWithMaxFollowers.end(), [](const Account &a, const Account &b)
+         { return a.getAccountName() < b.getAccountName(); });
+
+    // Get the account with the highest followers and the highest alphabetical order
+    Account accountWithMostFollowers = accountsWithMaxFollowers[0];
+
+    // Print the account with the most followers and its followers
+    cout << "The root user is " << accountWithMostFollowers.getAccountName() << ", with in degree centrality of " << accountWithMostFollowers.getFollowerCount() << "." << endl;
+    cout << "There are " << allAccounts.size() << " users in the social network." << endl;
+    cout << accountWithMostFollowers.getAccountName() << " (0)" << endl;
+
+    for (int i = 0; i < accountWithMostFollowers.getFollowerCount(); i++)
+    {
+        cout << accountWithMostFollowers.getFollowerList()[i] << " (1)" << endl;
+        Account follower = accountWithMostFollowers.getFollowerList()[i];
+        for (const auto &acc : allAccounts)
+        {
+            if (acc.getAccountName() == follower.getAccountName())
+            {
+                for (const auto &follower : acc.getFollowerList())
+                {
+                    cout << follower << " (2)" << endl;
+                }
+            }
+        }
+    }
+
+    inputFile.close();
     return 0;
 }
 

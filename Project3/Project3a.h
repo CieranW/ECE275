@@ -17,6 +17,7 @@ public:
     string getAccountName() const;
     string getFollowerName() const;
     string getFollower() const;
+    vector<string> getFollowerList() const;
     int getFollowerCount() const;
 
 private:
